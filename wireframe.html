@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HealthConnect — Wireframe</title>
+<title>Digital Platform — Wireframe</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -20,7 +20,7 @@
   html, body { height: 100%; font-family: 'Courier New', Courier, monospace; background: var(--w-bg); color: var(--w-text); font-size: 12px; }
   /* LAYOUT */
   #app     { display: flex; height: 100vh; overflow: hidden; }
-  #sidebar { width: 220px; flex-shrink: 0; background: var(--w-surface); border-right: 2px solid var(--w-border); display: flex; flex-direction: column; overflow-y: auto; }
+  #sidebar { width: 240px; flex-shrink: 0; background: var(--w-surface); border-right: 2px solid var(--w-border); display: flex; flex-direction: column; overflow-y: auto; }
   #main    { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
   #topbar  { height: 52px; flex-shrink: 0; background: var(--w-surface); border-bottom: 2px solid var(--w-border); display: flex; align-items: center; padding: 0 20px; gap: 12px; justify-content: space-between; }
   #content { flex: 1; overflow-y: auto; background: var(--w-bg); }
@@ -93,12 +93,6 @@
   .step:last-child { border-right: 1px solid var(--w-border); }
   .step.active { background: var(--w-active); color: var(--w-surface); font-weight: bold; }
   .step.done   { background: var(--w-block);  color: var(--w-text);    font-weight: bold; }
-  /* SLOTS */
-  .slot-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-  .slot      { height: 28px; width: 72px; background: var(--w-block); border: 1px solid var(--w-border); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--w-text); cursor: pointer; }
-  .slot:hover     { background: var(--w-dark); }
-  .slot.selected  { background: var(--w-active); color: var(--w-surface); border-color: var(--w-stroke); }
-  .slot.full      { background: var(--w-surface); color: var(--w-label); cursor: not-allowed; text-decoration: line-through; }
   /* SELECT OPTS */
   .sel-grp { display: flex; flex-direction: column; gap: 5px; }
   .sel-opt { height: 30px; background: var(--w-block); border: 1px solid var(--w-border); display: flex; align-items: center; padding: 0 10px; font-size: 10px; cursor: pointer; gap: 8px; }
@@ -131,6 +125,22 @@
   .ok-ring  { width: 52px; height: 52px; border: 2px solid var(--w-stroke); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 22px; color: var(--w-stroke); }
   .cbox     { background: var(--w-bg); border: 1px dashed var(--w-border); padding: 14px 16px; margin-bottom: 12px; }
   .divider  { border: none; border-top: 1px dashed var(--w-border); margin: 12px 0; }
+  /* LANDING PAGE SPECIFIC */
+  .hero-section { text-align: center; padding: 40px 20px; background: var(--w-surface); border: 1px solid var(--w-border); margin-bottom: 20px; }
+  .hero-title { height: 32px; width: 300px; background: var(--w-block); border: 1px solid var(--w-border); margin: 0 auto 12px; }
+  .hero-sub { height: 12px; width: 400px; background: var(--w-surface); border: 1px dashed var(--w-border); margin: 0 auto 20px; }
+  .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .feature-card { background: var(--w-surface); border: 1px solid var(--w-border); padding: 16px; text-align: center; }
+  .feature-icon { width: 40px; height: 40px; background: var(--w-dark); border: 1px solid var(--w-border); margin: 0 auto 10px; }
+  /* CHAT INTERFACE */
+  .chat-container { display: flex; flex-direction: column; height: 400px; border: 1px solid var(--w-border); background: var(--w-surface); }
+  .chat-header { padding: 12px 16px; border-bottom: 1px solid var(--w-border); background: var(--w-block); }
+  .chat-messages { flex: 1; padding: 16px; overflow-y: auto; }
+  .chat-input { padding: 12px 16px; border-top: 1px solid var(--w-border); display: flex; gap: 8px; }
+  .chat-msg { margin-bottom: 12px; }
+  .chat-msg.user { text-align: right; }
+  .chat-bubble { display: inline-block; padding: 8px 12px; background: var(--w-block); border: 1px solid var(--w-border); max-width: 70%; }
+  .chat-bubble.user { background: var(--w-active); color: var(--w-surface); }
 </style>
 </head>
 <body>
@@ -138,770 +148,1306 @@
   <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="sb-logo">
-      <div class="sb-logo-box">[ LOGO — HealthConnect ]</div>
+      <div class="sb-logo-box">[ LOGO — Digital Platform ]</div>
     </div>
-    <div class="sb-section">Patient Portal</div>
-    <div class="nav-link active" onclick="show('dashboard',this)"><div class="nav-icon"></div>Dashboard</div>
-    <div class="nav-link" onclick="show('appointments',this)"><div class="nav-icon"></div>My Appointments</div>
-    <div class="nav-link" onclick="show('book-appointment',this)"><div class="nav-icon"></div>Book Appointment</div>
-    <div class="nav-link" onclick="show('health-assessment',this)"><div class="nav-icon"></div>Health Assessment</div>
-    <div class="nav-link" onclick="show('test-results',this)"><div class="nav-icon"></div>Test Results</div>
+    <div class="sb-section">Discovery & Auth</div>
+    <div class="nav-link active" onclick="show('landing',this)"><div class="nav-icon"></div>Landing Page</div>
+    <div class="nav-link" onclick="show('auth-entry',this)"><div class="nav-icon"></div>Authentication</div>
+    <div class="nav-link" onclick="show('username',this)"><div class="nav-icon"></div>Username Creation</div>
+    <div class="nav-link" onclick="show('verification',this)"><div class="nav-icon"></div>Verification</div>
+    <div class="nav-link" onclick="show('password',this)"><div class="nav-icon"></div>Password Setup</div>
+    <div class="nav-link" onclick="show('welcome',this)"><div class="nav-icon"></div>Welcome Dashboard</div>
+    
     <div class="sb-section">Communication</div>
-    <div class="nav-link" onclick="show('messages',this)"><div class="nav-icon"></div>Messages</div>
-    <div class="nav-link" onclick="show('chat-support',this)"><div class="nav-icon"></div>Live Chat</div>
-    <div class="sb-section">Account</div>
-    <div class="nav-link" onclick="show('documents',this)"><div class="nav-icon"></div>Documents</div>
-    <div class="nav-link" onclick="show('profile',this)"><div class="nav-icon"></div>Profile Settings</div>
-    <div class="nav-link" onclick="show('registration',this)"><div class="nav-icon"></div>Registration</div>
-    <div class="nav-link" onclick="show('login',this)"><div class="nav-icon"></div>Login</div>
+    <div class="nav-link" onclick="show('help-init',this)"><div class="nav-icon"></div>Help Initiation</div>
+    <div class="nav-link" onclick="show('chat-interface',this)"><div class="nav-icon"></div>Chat Interface</div>
+    <div class="nav-link" onclick="show('problem-diagnosis',this)"><div class="nav-icon"></div>Problem Diagnosis</div>
+    <div class="nav-link" onclick="show('solution-delivery',this)"><div class="nav-icon"></div>Solution Delivery</div>
+    <div class="nav-link" onclick="show('resolution',this)"><div class="nav-icon"></div>Resolution</div>
+    
+    <div class="sb-section">Process Management</div>
+    <div class="nav-link" onclick="show('process-overview',this)"><div class="nav-icon"></div>Process Overview</div>
+    <div class="nav-link" onclick="show('info-gathering',this)"><div class="nav-icon"></div>Info Gathering</div>
+    <div class="nav-link" onclick="show('review-validation',this)"><div class="nav-icon"></div>Review & Validation</div>
+    <div class="nav-link" onclick="show('approval-workflow',this)"><div class="nav-icon"></div>Approval Workflow</div>
+    <div class="nav-link" onclick="show('implementation',this)"><div class="nav-icon"></div>Implementation</div>
+    <div class="nav-link" onclick="show('monitoring',this)"><div class="nav-icon"></div>Monitoring</div>
+    <div class="nav-link" onclick="show('completion',this)"><div class="nav-icon"></div>Completion</div>
+    
+    <div class="sb-section">Experience Tracking</div>
+    <div class="nav-link" onclick="show('experience-dashboard',this)"><div class="nav-icon"></div>Experience Dashboard</div>
+    <div class="nav-link" onclick="show('activity-history',this)"><div class="nav-icon"></div>Activity History</div>
+    <div class="nav-link" onclick="show('progress-analysis',this)"><div class="nav-icon"></div>Progress Analysis</div>
+    <div class="nav-link" onclick="show('pattern-recognition',this)"><div class="nav-icon"></div>Pattern Recognition</div>
+    <div class="nav-link" onclick="show('future-planning',this)"><div class="nav-icon"></div>Future Planning</div>
+    
     <div class="sb-footer">
       <div style="font-size:10px;color:var(--w-label);line-height:1.9">
-        <div style="font-weight:bold;color:var(--w-text);margin-bottom:2px">HealthConnect v3.1.2</div>
-        <div>HIPAA Compliant &nbsp;·&nbsp; 256-bit TLS</div>
-        <div>&copy; 2024 HealthConnect Inc.</div>
+        <div style="font-weight:bold;color:var(--w-text);margin-bottom:2px">Platform v1.0</div>
+        <div>Secure &nbsp;·&nbsp; Compliant</div>
+        <div>&copy; 2024 Digital Platform Inc.</div>
       </div>
     </div>
   </div>
+
   <!-- MAIN -->
   <div id="main">
     <div id="topbar">
-      <div class="search-wf">[ Search patients, appointments, docs... ]</div>
+      <div class="search-wf">[ Search functionality ________________ ]</div>
       <div class="topbar-right">
-        <div class="notif-wf">[ Bell / Alerts ]</div>
-        <div class="avatar-wf">SJ</div>
+        <div class="notif-wf">[ Notifications ]</div>
+        <div class="avatar-wf">U</div>
         <div class="topbar-name"></div>
       </div>
     </div>
     <div id="content">
-      <!-- DASHBOARD -->
-      <div class="page active" id="dashboard">
+
+      <!-- LANDING PAGE -->
+      <div class="page active" id="landing">
+        <div class="hero-section">
+          <div class="hero-title"></div>
+          <div class="hero-sub"></div>
+          <div class="btn-grp" style="justify-content: center; margin-top: 20px;">
+            <button class="btn filled" onclick="show('auth-entry',document.querySelectorAll('.nav-link')[1])">[ Get Started ]</button>
+            <button class="btn" onclick="show('help-init',document.querySelectorAll('.nav-link')[6])">[ Learn More ]</button>
+          </div>
+        </div>
+        
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon"></div>
+            <div class="ln w80" style="margin: 0 auto 8px;"></div>
+            <div class="lnsm w100"></div>
+            <div class="lnsm w60" style="margin-top: 4px;"></div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"></div>
+            <div class="ln w80" style="margin: 0 auto 8px;"></div>
+            <div class="lnsm w100"></div>
+            <div class="lnsm w60" style="margin-top: 4px;"></div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"></div>
+            <div class="ln w80" style="margin: 0 auto 8px;"></div>
+            <div class="lnsm w100"></div>
+            <div class="lnsm w60" style="margin-top: 4px;"></div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="wf-row">
+            <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+            <div class="tag"></div>
+          </div>
+          <div class="wf-row">
+            <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+            <div class="tag"></div>
+          </div>
+          <div class="wf-row">
+            <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+            <div class="tag"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUTHENTICATION ENTRY -->
+      <div class="page" id="auth-entry">
+        <div class="bc-wf"></div>
         <div class="ph">
           <div><div class="ph-title"></div><div class="ph-sub"></div></div>
-          <button class="btn filled" onclick="show('book-appointment',document.querySelectorAll('.nav-link')[2])">[ + Book Appointment ]</button>
+          <button class="btn" onclick="show('landing',document.querySelectorAll('.nav-link')[0])">[ ← Back ]</button>
         </div>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <button class="btn filled" onclick="show('username',document.querySelectorAll('.nav-link')[2])">[ Create Account ]</button>
+            <hr class="divider"/>
+            <div class="btn-grp">
+              <button class="btn" onclick="show('username',document.querySelectorAll('.nav-link')[2])">[ Google ]</button>
+              <button class="btn" onclick="show('username',document.querySelectorAll('.nav-link')[2])">[ Facebook ]</button>
+              <button class="btn" onclick="show('username',document.querySelectorAll('.nav-link')[2])">[ LinkedIn ]</button>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="lnsm w100"></div>
+            <div class="lnsm w80" style="margin-top: 4px;"></div>
+            <div class="lnsm w60" style="margin-top: 4px;"></div>
+            <hr class="divider"/>
+            <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="tag"></div></div>
+            <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="tag"></div></div>
+            <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="tag"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USERNAME CREATION -->
+      <div class="page" id="username">
+        <div class="bc-wf"></div>
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('auth-entry',document.querySelectorAll('.nav-link')[1])">[ ← Back ]</button>
+        </div>
+        
+        <div class="card" style="max-width: 500px; margin: 0 auto;">
+          <div class="card-title"></div>
+          <div class="fgrp">
+            <div class="lbl"></div>
+            <div class="inp"></div>
+            <div class="lnsm w100" style="color: var(--w-label);">[ Username availability indicator ]</div>
+          </div>
+          
+          <div class="card" style="background: var(--w-bg); margin: 12px 0;">
+            <div class="lnsm w80" style="margin-bottom: 8px;">[ Suggested usernames ]</div>
+            <div class="btn-grp">
+              <button class="btn sm">[ suggestion1 ]</button>
+              <button class="btn sm">[ suggestion2 ]</button>
+              <button class="btn sm">[ suggestion3 ]</button>
+            </div>
+          </div>
+          
+          <div class="btn-grp">
+            <button class="btn" onclick="show('auth-entry',document.querySelectorAll('.nav-link')[1])">[ ← Back ]</button>
+            <button class="btn filled" onclick="show('verification',document.querySelectorAll('.nav-link')[3])">[ Continue ]</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VERIFICATION METHOD -->
+      <div class="page" id="verification">
+        <div class="bc-wf"></div>
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('username',document.querySelectorAll('.nav-link')[2])">[ ← Back ]</button>
+        </div>
+        
+        <div class="card" style="max-width: 500px; margin: 0 auto;">
+          <div class="card-title"></div>
+          <div class="sel-grp">
+            <div class="sel-opt active" onclick="selOpt(this)">
+              <div class="sel-dot"></div>
+              <div style="flex: 1;">
+                <div class="ln w60" style="margin: 0 0 4px 0;"></div>
+                <div class="lnsm w80" style="margin: 0;"></div>
+              </div>
+            </div>
+            <div class="sel-opt" onclick="selOpt(this)">
+              <div class="sel-dot"></div>
+              <div style="flex: 1;">
+                <div class="ln w60" style="margin: 0 0 4px 0;"></div>
+                <div class="lnsm w80" style="margin: 0;"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="fgrp" style="margin-top: 16px;">
+            <div class="lbl"></div>
+            <div class="inp"></div>
+          </div>
+          
+          <div class="btn-grp">
+            <button class="btn" onclick="show('username',document.querySelectorAll('.nav-link')[2])">[ ← Back ]</button>
+            <button class="btn filled" onclick="show('password',document.querySelectorAll('.nav-link')[4])">[ Send Code ]</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASSWORD CREATION -->
+      <div class="page" id="password">
+        <div class="bc-wf"></div>
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('verification',document.querySelectorAll('.nav-link')[3])">[ ← Back ]</button>
+        </div>
+        
+        <div class="card" style="max-width: 500px; margin: 0 auto;">
+          <div class="card-title"></div>
+          
+          <div class="fgrp">
+            <div class="lbl"></div>
+            <div class="inp"></div>
+            <div class="lnsm w100" style="margin-bottom: 8px;">[ Verification code from email/SMS ]</div>
+          </div>
+          
+          <div class="fgrp">
+            <div class="lbl"></div>
+            <div class="inp"></div>
+            <div class="card" style="background: var(--w-bg); margin: 8px 0; padding: 8px;">
+              <div class="lnsm w100" style="margin-bottom: 4px;">[ Password strength indicator ]</div>
+              <div class="lnsm w80"></div>
+              <div class="lnsm w60" style="margin-top: 4px;"></div>
+            </div>
+          </div>
+          
+          <div class="fgrp">
+            <div class="lbl"></div>
+            <div class="inp"></div>
+          </div>
+          
+          <div class="btn-grp">
+            <button class="btn" onclick="show('verification',document.querySelectorAll('.nav-link')[3])">[ ← Back ]</button>
+            <button class="btn filled" onclick="show('welcome',document.querySelectorAll('.nav-link')[5])">[ Create Account ]</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- WELCOME DASHBOARD -->
+      <div class="page" id="welcome">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn filled" onclick="show('process-overview',document.querySelectorAll('.nav-link')[11])">[ Start Process ]</button>
+        </div>
+        
+        <div class="ok-wrap">
+          <div class="ok-ring">✓</div>
+          <div class="ln" style="width:200px;margin:0 auto 10px"></div>
+          <div class="lnsm" style="width:260px;margin:0 auto 24px"></div>
+        </div>
+        
         <div class="g3">
           <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
           <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
           <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
         </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="wf-row">
+            <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+            <button class="btn sm" onclick="show('help-init',document.querySelectorAll('.nav-link')[6])">[ Get Help ]</button>
+          </div>
+          <div class="wf-row">
+            <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+            <button class="btn sm" onclick="show('experience-dashboard',document.querySelectorAll('.nav-link')[17])">[ View Progress ]</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HELP INITIATION -->
+      <div class="page" id="help-init">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('welcome',document.querySelectorAll('.nav-link')[5])">[ ← Back ]</button>
+        </div>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="btn-grp" style="flex-direction: column; gap: 12px;">
+              <button class="btn filled" onclick="show('chat-interface',document.querySelectorAll('.nav-link')[7])">[ Start Live Chat ]</button>
+              <button class="btn">[ Browse FAQ ]</button>
+              <button class="btn">[ Video Tutorials ]</button>
+              <button class="btn">[ Contact Support ]</button>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <div class="tag"></div>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <div class="tag"></div>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <div class="tag"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="fgrp">
+            <div class="lbl"></div>
+            <div class="inp"></div>
+          </div>
+          <button class="btn filled">[ Search Help ]</button>
+        </div>
+      </div>
+
+      <!-- CHAT INTERFACE -->
+      <div class="page" id="chat-interface">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('help-init',document.querySelectorAll('.nav-link')[6])">[ ← Back ]</button>
+        </div>
+        
+        <div class="chat-container">
+          <div class="chat-header">
+            <div class="ln w60" style="margin: 0;"></div>
+          </div>
+          
+          <div class="chat-messages">
+            <div class="chat-msg">
+              <div class="chat-bubble">
+                <div class="lnsm w100" style="margin-bottom: 4px;"></div>
+                <div class="lnsm w80"></div>
+              </div>
+            </div>
+            
+            <div class="chat-msg user">
+              <div class="chat-bubble user">
+                <div class="lnsm w60" style="margin-bottom: 4px;"></div>
+                <div class="lnsm w40"></div>
+              </div>
+            </div>
+            
+            <div class="chat-msg">
+              <div class="chat-bubble">
+                <div class="lnsm w100" style="margin-bottom: 4px;"></div>
+                <div class="lnsm w80"></div>
+                <div class="lnsm w60" style="margin-top: 4px;"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="chat-input">
+            <div class="inp" style="flex: 1; margin: 0;"></div>
+            <button class="btn filled" onclick="show('problem-diagnosis',document.querySelectorAll('.nav-link')[8])">[ Send ]</button>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-top: 16px;">
+          <div class="card-title"></div>
+          <div class="btn-grp">
+            <button class="btn sm">[ Common Issue 1 ]</button>
+            <button class="btn sm">[ Common Issue 2 ]</button>
+            <button class="btn sm">[ Common Issue 3 ]</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROBLEM DIAGNOSIS -->
+      <div class="page" id="problem-diagnosis">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('chat-interface',document.querySelectorAll('.nav-link')[7])">[ ← Back to Chat ]</button>
+        </div>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="sel-grp">
+              <div class="sel-opt active" onclick="selOpt(this)">
+                <div class="sel-dot"></div>
+                <div class="ln w80" style="margin: 0;"></div>
+              </div>
+              <div class="sel-opt" onclick="selOpt(this)">
+                <div class="sel-dot"></div>
+                <div class="ln w80" style="margin: 0;"></div>
+              </div>
+              <div class="sel-opt" onclick="selOpt(this)">
+                <div class="sel-dot"></div>
+                <div class="ln w80" style="margin: 0;"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="txa"></div>
+            </div>
+            <button class="btn">[ Upload Screenshot ]</button>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="steps">
+            <div class="step active">1 — Identify Issue</div>
+            <div class="step">2 — Gather Context</div>
+            <div class="step">3 — Analyze Problem</div>
+          </div>
+          <button class="btn filled" onclick="show('solution-delivery',document.querySelectorAll('.nav-link')[9])">[ Analyze & Get Solution ]</button>
+        </div>
+      </div>
+
+      <!-- SOLUTION DELIVERY -->
+      <div class="page" id="solution-delivery">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('problem-diagnosis',document.querySelectorAll('.nav-link')[8])">[ ← Back ]</button>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="steps">
+            <div class="step done">1 — Follow Step 1</div>
+            <div class="step active">2 — Follow Step 2</div>
+            <div class="step">3 — Follow Step 3</div>
+            <div class="step">4 — Verify Solution</div>
+          </div>
+        </div>
+        
         <div class="g2">
           <div class="card">
             <div class="card-title"></div>
             <div class="wf-row">
-              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
-              <button class="btn sm" onclick="show('appointments',document.querySelectorAll('.nav-link')[1])">[ View ]</button>
+              <div class="row-l">
+                <div class="ln w100" style="margin-bottom: 4px;"></div>
+                <div class="lnsm w80"></div>
+                <div class="lnsm w60" style="margin-top: 4px;"></div>
+              </div>
+              <button class="btn sm">[ ✓ Done ]</button>
             </div>
             <div class="wf-row">
-              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
-              <button class="btn sm" onclick="show('appointments',document.querySelectorAll('.nav-link')[1])">[ Reschedule ]</button>
-            </div>
-            <div style="margin-top:10px">
-              <button class="btn" onclick="show('book-appointment',document.querySelectorAll('.nav-link')[2])">[ + Book New ]</button>
+              <div class="row-l">
+                <div class="ln w100" style="margin-bottom: 4px;"></div>
+                <div class="lnsm w80"></div>
+              </div>
+              <button class="btn sm">[ ✓ Done ]</button>
             </div>
           </div>
+          
           <div class="card">
             <div class="card-title"></div>
-            <div class="wf-row"><div class="ln w60" style="margin:0"></div><div class="tag"></div></div>
-            <div class="wf-row"><div class="ln w60" style="margin:0"></div><div class="tag"></div></div>
-            <div class="wf-row">
-              <div class="ln w60" style="margin:0"></div>
-              <button class="btn sm" onclick="show('test-results',document.querySelectorAll('.nav-link')[4])">[ View Results ]</button>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title"></div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--w-block);border:1px dashed var(--w-border)">
-              <div style="width:10px;height:10px;background:var(--w-stroke);flex-shrink:0"></div>
-              <div class="ln w100" style="margin:0;flex:1"></div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--w-block);border:1px dashed var(--w-border)">
-              <div style="width:10px;height:10px;background:var(--w-stroke);flex-shrink:0"></div>
-              <div class="ln w100" style="margin:0;flex:1"></div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--w-block);border:1px dashed var(--w-border)">
-              <div style="width:10px;height:10px;background:var(--w-stroke);flex-shrink:0"></div>
-              <div class="ln w100" style="margin:0;flex:1"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- PATIENT REGISTRATION -->
-      <div class="page" id="registration">
-        <div class="ph">
-          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
-          <button class="btn" onclick="show('login',document.querySelectorAll('.nav-link')[11])">[ Already have account? ]</button>
-        </div>
-        <div class="steps">
-          <div class="step active" id="reg-stp1">1 — Basic Info</div>
-          <div class="step" id="reg-stp2">2 — Contact</div>
-          <div class="step" id="reg-stp3">3 — Verification</div>
-          <div class="step" id="reg-stp4">4 — Health Profile</div>
-        </div>
-        <!-- Step 1 -->
-        <div id="reg-1">
-          <div class="g2">
-            <div class="card">
-              <div class="card-title"></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            </div>
-            <div class="card">
-              <div class="card-title"></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="radio-grp">
-                <div class="radio-opt active" onclick="selRadio(this)">Email</div>
-                <div class="radio-opt" onclick="selRadio(this)">Google</div>
-                <div class="radio-opt" onclick="selRadio(this)">Apple</div>
+            <div class="cbox">
+              <div class="lnsm w100" style="margin-bottom: 8px;">[ Alternative solutions ]</div>
+              <div class="btn-grp">
+                <button class="btn sm">[ Method A ]</button>
+                <button class="btn sm">[ Method B ]</button>
               </div>
             </div>
           </div>
-          <button class="btn filled" onclick="goRegStep(2)">[ Next: Contact Info → ]</button>
         </div>
-        <!-- Step 2 -->
-        <div id="reg-2" style="display:none">
-          <div class="card" style="max-width:540px">
-            <div class="card-title"></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-          </div>
-          <div class="btn-grp">
-            <button class="btn" onclick="goRegStep(1)">[ ← Back ]</button>
-            <button class="btn filled" onclick="goRegStep(3)">[ Verify Contact → ]</button>
-          </div>
-        </div>
-        <!-- Step 3 -->
-        <div id="reg-3" style="display:none">
-          <div class="card" style="max-width:440px;margin:0 auto;text-align:center">
-            <div class="card-title" style="margin:0 auto 16px"></div>
-            <div class="lnsm w80" style="margin:0 auto 20px"></div>
-            <div style="display:flex;justify-content:center;gap:8px;margin-bottom:20px">
-              <div class="inp" style="width:40px;text-align:center"></div>
-              <div class="inp" style="width:40px;text-align:center"></div>
-              <div class="inp" style="width:40px;text-align:center"></div>
-              <div class="inp" style="width:40px;text-align:center"></div>
-              <div class="inp" style="width:40px;text-align:center"></div>
-              <div class="inp" style="width:40px;text-align:center"></div>
-            </div>
-            <div class="lnsm w60" style="margin:0 auto 16px"></div>
-            <button class="btn sm">[ Resend Code ]</button>
-          </div>
-          <div class="btn-grp" style="justify-content:center">
-            <button class="btn" onclick="goRegStep(2)">[ ← Back ]</button>
-            <button class="btn filled" onclick="goRegStep(4)">[ Verify & Continue → ]</button>
-          </div>
-        </div>
-        <!-- Step 4 -->
-        <div id="reg-4" style="display:none">
-          <div class="g2">
-            <div class="card">
-              <div class="card-title"></div>
-              <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            </div>
-            <div class="card">
-              <div class="card-title"></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            </div>
-          </div>
-          <div class="btn-grp">
-            <button class="btn" onclick="goRegStep(3)">[ ← Back ]</button>
-            <button class="btn filled" onclick="show('dashboard',document.querySelectorAll('.nav-link')[0])">[ Complete Registration ]</button>
-          </div>
+        
+        <div class="btn-grp">
+          <button class="btn">[ Need More Help ]</button>
+          <button class="btn filled" onclick="show('resolution',document.querySelectorAll('.nav-link')[10])">[ Solution Worked ]</button>
         </div>
       </div>
-      <!-- LOGIN -->
-      <div class="page" id="login">
-        <div class="ok-wrap">
-          <div class="card-title" style="width:160px;margin:0 auto 20px"></div>
-          <div class="card" style="text-align:left">
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-              <label style="display:flex;align-items:center;gap:6px;font-size:10px">
-                <div style="width:12px;height:12px;border:1px solid var(--w-border);background:var(--w-block)"></div>
-                Remember me
-              </label>
-              <div class="lnsm w60"></div>
-            </div>
-            <button class="btn filled w100" onclick="show('dashboard',document.querySelectorAll('.nav-link')[0])">[ Sign In ]</button>
-            <hr class="divider"/>
-            <div class="btn-grp" style="justify-content:center">
-              <button class="btn sm">[ Google ]</button>
-              <button class="btn sm">[ Apple ]</button>
-              <button class="btn sm">[ Facebook ]</button>
-            </div>
-          </div>
-          <div style="text-align:center;margin-top:16px">
-            <div class="lnsm w80" style="margin:0 auto 8px"></div>
-            <button class="btn" onclick="show('registration',document.querySelectorAll('.nav-link')[10])">[ Create New Account ]</button>
-          </div>
-        </div>
-      </div>
-      <!-- APPOINTMENTS -->
-      <div class="page" id="appointments">
+
+      <!-- RESOLUTION CONFIRMATION -->
+      <div class="page" id="resolution">
         <div class="ph">
           <div><div class="ph-title"></div><div class="ph-sub"></div></div>
-          <button class="btn filled" onclick="show('book-appointment',document.querySelectorAll('.nav-link')[2])">[ + Book New ]</button>
+          <button class="btn" onclick="show('welcome',document.querySelectorAll('.nav-link')[5])">[ ← Dashboard ]</button>
         </div>
-        <div class="tab-bar">
-          <div class="tab active" onclick="switchTab(this,'apt-up')">Upcoming (3)</div>
-          <div class="tab" onclick="switchTab(this,'apt-past')">Past (12)</div>
-          <div class="tab" onclick="switchTab(this,'apt-cancel')">Cancelled (2)</div>
+        
+        <div class="ok-wrap">
+          <div class="ok-ring">✓</div>
+          <div class="ln" style="width:200px;margin:0 auto 10px"></div>
+          <div class="lnsm" style="width:260px;margin:0 auto 24px"></div>
         </div>
-        <div id="apt-up">
-          <div class="li">
-            <div style="flex:1">
-              <div class="ln w80" style="margin-bottom:6px"></div>
-              <div class="lnsm w60"></div>
-              <div style="display:flex;gap:6px;margin-top:8px"><div class="tag"></div><div class="tag tagw"></div></div>
-            </div>
-            <div class="li-acts">
-              <button class="btn sm">[ Reschedule ]</button>
-              <button class="btn sm">[ Cancel ]</button>
-              <button class="btn sm">[ Add to Cal ]</button>
-            </div>
-          </div>
-          <div class="li">
-            <div style="flex:1">
-              <div class="ln w80" style="margin-bottom:6px"></div>
-              <div class="lnsm w60"></div>
-              <div style="display:flex;gap:6px;margin-top:8px"><div class="tag"></div><div class="tag tagw"></div></div>
-            </div>
-            <div class="li-acts">
-              <button class="btn sm">[ Reschedule ]</button>
-              <button class="btn sm">[ Cancel ]</button>
-              <button class="btn sm">[ Join Video ]</button>
+        
+        <div class="card" style="max-width: 500px; margin: 0 auto;">
+          <div class="card-title"></div>
+          <div class="fgrp">
+            <div class="lbl"></div>
+            <div class="radio-grp">
+              <div class="radio-opt active" onclick="selRadio(this)">Excellent</div>
+              <div class="radio-opt" onclick="selRadio(this)">Good</div>
+              <div class="radio-opt" onclick="selRadio(this)">Fair</div>
+              <div class="radio-opt" onclick="selRadio(this)">Poor</div>
             </div>
           </div>
-          <div class="li">
-            <div style="flex:1">
-              <div class="ln w80" style="margin-bottom:6px"></div>
-              <div class="lnsm w60"></div>
-              <div style="display:flex;gap:6px;margin-top:8px"><div class="tag"></div><div class="tag tagw"></div></div>
-            </div>
-            <div class="li-acts">
-              <button class="btn sm">[ Reschedule ]</button>
-              <button class="btn sm">[ Cancel ]</button>
-              <button class="btn sm">[ Pre-Visit Form ]</button>
-            </div>
+          
+          <div class="fgrp">
+            <div class="lbl"></div>
+            <div class="txa"></div>
           </div>
-        </div>
-        <div id="apt-past" style="display:none">
-          <div class="li">
-            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
-            <button class="btn sm">[ View Summary ]</button>
-          </div>
-          <div class="li">
-            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
-            <button class="btn sm">[ View Summary ]</button>
-          </div>
-        </div>
-        <div id="apt-cancel" style="display:none">
-          <div class="li">
-            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag tagw"></div></div></div>
-            <button class="btn sm" onclick="show('book-appointment',document.querySelectorAll('.nav-link')[2])">[ Rebook ]</button>
+          
+          <div class="btn-grp">
+            <button class="btn">[ Skip Feedback ]</button>
+            <button class="btn filled">[ Submit Feedback ]</button>
           </div>
         </div>
       </div>
-      <!-- BOOK APPOINTMENT -->
-      <div class="page" id="book-appointment">
+
+      <!-- PROCESS OVERVIEW -->
+      <div class="page" id="process-overview">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('welcome',document.querySelectorAll('.nav-link')[5])">[ ← Dashboard ]</button>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="steps">
+            <div class="step active">1 — Info Gathering</div>
+            <div class="step">2 — Review</div>
+            <div class="step">3 — Approval</div>
+            <div class="step">4 — Implementation</div>
+            <div class="step">5 — Monitoring</div>
+            <div class="step">6 — Completion</div>
+          </div>
+        </div>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w80" style="margin: 0;"></div></div>
+              <div class="tag"></div>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w80" style="margin: 0;"></div></div>
+              <div class="tag"></div>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w80" style="margin: 0;"></div></div>
+              <div class="tag"></div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+            <hr class="divider"/>
+            <div class="lnsm w100"></div>
+            <div class="lnsm w80" style="margin-top: 4px;"></div>
+          </div>
+        </div>
+        
+        <div class="btn-grp">
+          <button class="btn">[ Save for Later ]</button>
+          <button class="btn filled" onclick="show('info-gathering',document.querySelectorAll('.nav-link')[12])">[ Start Process ]</button>
+        </div>
+      </div>
+
+      <!-- INFO GATHERING -->
+      <div class="page" id="info-gathering">
         <div class="bc-wf"></div>
         <div class="ph">
           <div><div class="ph-title"></div><div class="ph-sub"></div></div>
-          <button class="btn" onclick="show('dashboard',document.querySelectorAll('.nav-link')[0])">[ ← Cancel ]</button>
+          <button class="btn" onclick="show('process-overview',document.querySelectorAll('.nav-link')[11])">[ ← Back ]</button>
         </div>
-        <div class="steps">
-          <div class="step active" id="bk-stp1">1 — Choose Provider</div>
-          <div class="step" id="bk-stp2">2 — Date & Time</div>
-          <div class="step" id="bk-stp3">3 — Details</div>
-          <div class="step" id="bk-stp4">4 — Confirm</div>
-        </div>
-        <!-- Step 1 -->
-        <div id="bk-1">
-          <div class="g2">
-            <div class="card">
-              <div class="card-title"></div>
-              <div class="sel-grp">
-                <div class="sel-opt active" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w60" style="margin:0"></div></div>
-                <div class="sel-opt" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w60" style="margin:0"></div></div>
-                <div class="sel-opt" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w60" style="margin:0"></div></div>
-                <div class="sel-opt" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w60" style="margin:0"></div></div>
-              </div>
-            </div>
-            <div>
-              <div class="card">
-                <div class="card-title"></div>
-                <div class="sel-grp">
-                  <div class="sel-opt active" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w80" style="margin:0"></div></div>
-                  <div class="sel-opt" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w80" style="margin:0"></div></div>
-                  <div class="sel-opt" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w80" style="margin:0"></div></div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-title"></div>
-                <div class="radio-grp">
-                  <div class="radio-opt active" onclick="selRadio(this)">In-Person</div>
-                  <div class="radio-opt" onclick="selRadio(this)">Video Call</div>
-                  <div class="radio-opt" onclick="selRadio(this)">Phone Call</div>
-                </div>
-              </div>
-            </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="steps">
+            <div class="step active">1 — Info Gathering</div>
+            <div class="step">2 — Review</div>
+            <div class="step">3 — Approval</div>
+            <div class="step">4 — Implementation</div>
+            <div class="step">5 — Monitoring</div>
+            <div class="step">6 — Completion</div>
           </div>
-          <button class="btn filled" onclick="goBookStep(2)">[ Next: Date & Time → ]</button>
         </div>
-        <!-- Step 2 -->
-        <div id="bk-2" style="display:none">
-          <div class="g2">
-            <div class="card">
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp">
-                <div class="lbl"></div>
-                <div class="slot-grid">
-                  <div class="slot selected" onclick="selSlot(this)">9:00 AM</div>
-                  <div class="slot" onclick="selSlot(this)">10:30 AM</div>
-                  <div class="slot" onclick="selSlot(this)">2:00 PM</div>
-                  <div class="slot" onclick="selSlot(this)">3:30 PM</div>
-                  <div class="slot full">4:00 PM</div>
-                  <div class="slot" onclick="selSlot(this)">5:00 PM</div>
-                </div>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+            <button class="btn">[ Import Data ]</button>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="radio-grp">
+                <div class="radio-opt active" onclick="selRadio(this)">Option A</div>
+                <div class="radio-opt" onclick="selRadio(this)">Option B</div>
+                <div class="radio-opt" onclick="selRadio(this)">Option C</div>
               </div>
             </div>
+            <button class="btn">[ Upload Files ]</button>
+          </div>
+        </div>
+        
+        <div class="btn-grp">
+          <button class="btn">[ Save Draft ]</button>
+          <button class="btn filled" onclick="show('review-validation',document.querySelectorAll('.nav-link')[13])">[ Continue to Review ]</button>
+        </div>
+      </div>
+
+      <!-- REVIEW & VALIDATION -->
+      <div class="page" id="review-validation">
+        <div class="bc-wf"></div>
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('info-gathering',document.querySelectorAll('.nav-link')[12])">[ ← Back ]</button>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="steps">
+            <div class="step done">1 — Info Gathering</div>
+            <div class="step active">2 — Review</div>
+            <div class="step">3 — Approval</div>
+            <div class="step">4 — Implementation</div>
+            <div class="step">5 — Monitoring</div>
+            <div class="step">6 — Completion</div>
+          </div>
+        </div>
+        
+        <div class="tab-bar">
+          <div class="tab active" onclick="switchTab(this,'review-summary')">Summary</div>
+          <div class="tab" onclick="switchTab(this,'review-details')">Details</div>
+          <div class="tab" onclick="switchTab(this,'review-validation')">Validation</div>
+        </div>
+        
+        <div id="review-summary">
+          <div class="g2">
             <div class="card">
               <div class="card-title"></div>
-              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
               <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
               <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
               <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
               <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="tag"></div></div>
             </div>
-          </div>
-          <div class="btn-grp">
-            <button class="btn" onclick="goBookStep(1)">[ ← Back ]</button>
-            <button class="btn filled" onclick="goBookStep(3)">[ Next: Details → ]</button>
-          </div>
-        </div>
-        <!-- Step 3 -->
-        <div id="bk-3" style="display:none">
-          <div class="card" style="max-width:540px">
-            <div class="card-title"></div>
-            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-          </div>
-          <div class="btn-grp">
-            <button class="btn" onclick="goBookStep(2)">[ ← Back ]</button>
-            <button class="btn filled" onclick="goBookStep(4)">[ Review & Confirm → ]</button>
-          </div>
-        </div>
-        <!-- Step 4 -->
-        <div id="bk-4" style="display:none">
-          <div class="ok-wrap">
-            <div class="ok-ring">&#10003;</div>
-            <div class="ln" style="width:200px;margin:0 auto 10px"></div>
-            <div class="lnsm" style="width:260px;margin:0 auto 24px"></div>
-            <div class="cbox" style="text-align:left">
-              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
-              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
-              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
-              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
-              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
-            </div>
-            <div class="btn-grp" style="justify-content:center;margin-top:16px">
-              <button class="btn" onclick="goBookStep(1)">[ Book Another ]</button>
-              <button class="btn filled" onclick="show('dashboard',document.querySelectorAll('.nav-link')[0])">[ Dashboard ]</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- HEALTH ASSESSMENT -->
-      <div class="page" id="health-assessment">
-        <div class="ph">
-          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
-          <button class="btn filled">[ Save Progress ]</button>
-        </div>
-        <div class="steps">
-          <div class="step active" id="ha-stp1">1 — Basic Health</div>
-          <div class="step" id="ha-stp2">2 — Lifestyle</div>
-          <div class="step" id="ha-stp3">3 — Symptoms</div>
-          <div class="step" id="ha-stp4">4 — Mental Health</div>
-          <div class="step" id="ha-stp5">5 — Review</div>
-        </div>
-        <!-- Step 1 -->
-        <div id="ha-1">
-          <div class="g2">
+            
             <div class="card">
               <div class="card-title"></div>
-              <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            </div>
-            <div class="card">
-              <div class="card-title"></div>
-              <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="tag"></div></div>
             </div>
           </div>
-          <button class="btn filled" onclick="goHealthStep(2)">[ Next: Lifestyle → ]</button>
         </div>
-        <!-- Step 2 -->
-        <div id="ha-2" style="display:none">
-          <div class="card" style="max-width:540px">
-            <div class="card-title"></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-          </div>
-          <div class="btn-grp">
-            <button class="btn" onclick="goHealthStep(1)">[ ← Back ]</button>
-            <button class="btn filled" onclick="goHealthStep(3)">[ Next: Symptoms → ]</button>
-          </div>
-        </div>
-        <!-- Step 3 -->
-        <div id="ha-3" style="display:none">
-          <div class="card" style="max-width:540px">
-            <div class="card-title"></div>
-            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
-            <div class="fgrp">
-              <div class="lbl"></div>
-              <div class="radio-grp">
-                <div class="radio-opt" onclick="selRadio(this)">None</div>
-                <div class="radio-opt" onclick="selRadio(this)">Mild</div>
-                <div class="radio-opt active" onclick="selRadio(this)">Moderate</div>
-                <div class="radio-opt" onclick="selRadio(this)">Severe</div>
-              </div>
-            </div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-          </div>
-          <div class="btn-grp">
-            <button class="btn" onclick="goHealthStep(2)">[ ← Back ]</button>
-            <button class="btn filled" onclick="goHealthStep(4)">[ Next: Mental Health → ]</button>
-          </div>
-        </div>
-        <!-- Step 4 -->
-        <div id="ha-4" style="display:none">
-          <div class="card" style="max-width:540px">
-            <div class="card-title"></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
-          </div>
-          <div class="btn-grp">
-            <button class="btn" onclick="goHealthStep(3)">[ ← Back ]</button>
-            <button class="btn filled" onclick="goHealthStep(5)">[ Review Assessment → ]</button>
-          </div>
-        </div>
-        <!-- Step 5 -->
-        <div id="ha-5" style="display:none">
-          <div class="card">
-            <div class="card-title"></div>
-            <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w50" style="margin:0"></div></div>
-            <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w50" style="margin:0"></div></div>
-            <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w50" style="margin:0"></div></div>
-            <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w50" style="margin:0"></div></div>
-            <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w50" style="margin:0"></div></div>
-          </div>
-          <div class="btn-grp">
-            <button class="btn" onclick="goHealthStep(4)">[ ← Back ]</button>
-            <button class="btn filled" onclick="show('dashboard',document.querySelectorAll('.nav-link')[0])">[ Submit Assessment ]</button>
-          </div>
-        </div>
-      </div>
-      <!-- TEST RESULTS -->
-      <div class="page" id="test-results">
-        <div class="ph">
-          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
-          <button class="btn filled">[ Download PDF ]</button>
-        </div>
-        <div class="tab-bar">
-          <div class="tab active" onclick="switchTab(this,'results-recent')">Recent (4)</div>
-          <div class="tab" onclick="switchTab(this,'results-all')">All Results (28)</div>
-          <div class="tab" onclick="switchTab(this,'results-trends')">Trends</div>
-        </div>
-        <div id="results-recent">
-          <div class="g2">
-            <div class="card">
-              <div class="card-title"></div>
-              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="tag"></div></div>
-              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
-              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
-              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="tag"></div></div>
-              <div style="margin-top:10px"><button class="btn sm">[ View Details ]</button></div>
-            </div>
-            <div class="card">
-              <div class="card-title"></div>
-              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
-              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
-              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
-              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
-              <div style="margin-top:10px"><button class="btn sm">[ View Details ]</button></div>
-            </div>
-          </div>
+        
+        <div id="review-details" style="display:none">
           <div class="card">
             <div class="card-title"></div>
             <div class="lnsm w100"></div>
-            <div class="lnsm w80" style="margin-top:4px"></div>
-            <div class="lnsm w60" style="margin-top:4px"></div>
-            <div style="margin-top:12px">
-              <button class="btn sm">[ Schedule Follow-up ]</button>
-              <button class="btn sm">[ Message Provider ]</button>
-            </div>
+            <div class="lnsm w80" style="margin-top: 4px;"></div>
+            <div class="lnsm w60" style="margin-top: 4px;"></div>
+            <hr class="divider"/>
+            <button class="btn sm">[ Edit Section ]</button>
           </div>
         </div>
-        <div id="results-all" style="display:none">
-          <div class="li">
-            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
-            <button class="btn sm">[ View ]</button>
-          </div>
-          <div class="li">
-            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
-            <button class="btn sm">[ View ]</button>
-          </div>
-        </div>
-        <div id="results-trends" style="display:none">
+        
+        <div id="review-validation" style="display:none">
           <div class="card">
             <div class="card-title"></div>
-            <div style="height:200px;background:var(--w-block);border:1px dashed var(--w-border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--w-label)">
-              [ Chart: Health Trends Over Time ]
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <div class="tag" style="background: var(--w-active); color: var(--w-surface);">✓</div>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <div class="tag" style="background: var(--w-active); color: var(--w-surface);">✓</div>
             </div>
           </div>
+        </div>
+        
+        <div class="btn-grp">
+          <button class="btn" onclick="show('info-gathering',document.querySelectorAll('.nav-link')[12])">[ ← Edit Info ]</button>
+          <button class="btn filled" onclick="show('approval-workflow',document.querySelectorAll('.nav-link')[14])">[ Submit for Approval ]</button>
         </div>
       </div>
-      <!-- MESSAGES -->
-      <div class="page" id="messages">
+
+      <!-- APPROVAL WORKFLOW -->
+      <div class="page" id="approval-workflow">
+        <div class="bc-wf"></div>
         <div class="ph">
           <div><div class="ph-title"></div><div class="ph-sub"></div></div>
-          <button class="btn filled">[ + New Message ]</button>
+          <button class="btn" onclick="show('review-validation',document.querySelectorAll('.nav-link')[13])">[ ← Back ]</button>
         </div>
-        <div class="g2" style="align-items:start">
-          <div class="card" style="margin-bottom:0">
-            <div class="card-title"></div>
-            <div class="msg-row">
-              <div style="flex:1"><div class="ln w60" style="margin-bottom:5px"></div><div class="lnsm w80"></div></div>
-              <div class="tag"></div>
-            </div>
-            <div class="msg-row">
-              <div style="flex:1"><div class="ln w60" style="margin-bottom:5px"></div><div class="lnsm w80"></div></div>
-              <div class="lnsm w30"></div>
-            </div>
-            <div class="msg-row">
-              <div style="flex:1"><div class="ln w60" style="margin-bottom:5px"></div><div class="lnsm w80"></div></div>
-              <div class="lnsm w30"></div>
-            </div>
-          </div>
-          <div class="card" style="margin-bottom:0">
-            <div class="card-title"></div>
-            <div class="msg-bub">
-              <div class="lnsm w40" style="margin-bottom:8px"></div>
-              <div class="lnsm w100"></div>
-              <div class="lnsm w100" style="margin-top:4px"></div>
-              <div class="lnsm w80" style="margin-top:4px"></div>
-            </div>
-            <div class="msg-bub" style="background:var(--w-bg)">
-              <div class="lnsm w40" style="margin-bottom:8px"></div>
-              <div class="lnsm w100"></div>
-              <div class="lnsm w60" style="margin-top:4px"></div>
-            </div>
-            <hr class="divider"/>
-            <div style="display:flex;gap:8px">
-              <div class="inp" style="flex:1;margin:0"></div>
-              <button class="btn filled">[ Send ]</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- LIVE CHAT SUPPORT -->
-      <div class="page" id="chat-support">
-        <div class="ph">
-          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
-          <button class="btn">[ End Chat ]</button>
-        </div>
-        <div class="card" style="height:400px;display:flex;flex-direction:column">
-          <div class="card-title"></div>
-          <div style="flex:1;overflow-y:auto;padding:10px 0">
-            <div class="msg-bub">
-              <div class="lnsm w30" style="margin-bottom:6px"></div>
-              <div class="lnsm w100"></div>
-              <div class="lnsm w80" style="margin-top:4px"></div>
-            </div>
-            <div class="msg-bub" style="background:var(--w-bg);margin-left:40px">
-              <div class="lnsm w20" style="margin-bottom:6px"></div>
-              <div class="lnsm w100"></div>
-            </div>
-            <div class="msg-bub">
-              <div class="lnsm w30" style="margin-bottom:6px"></div>
-              <div class="lnsm w100"></div>
-              <div class="lnsm w60" style="margin-top:4px"></div>
-            </div>
-            <div style="text-align:center;padding:8px;font-size:9px;color:var(--w-label)">
-              [ Support agent is typing... ]
-            </div>
-          </div>
-          <hr class="divider"/>
-          <div style="display:flex;gap:8px;align-items:flex-end">
-            <div class="inp" style="flex:1;margin:0"></div>
-            <button class="btn sm">[ Attach ]</button>
-            <button class="btn filled">[ Send ]</button>
-          </div>
-        </div>
+        
         <div class="card">
           <div class="card-title"></div>
-          <div class="btn-grp">
-            <button class="btn sm">[ Billing Question ]</button>
-            <button class="btn sm">[ Technical Issue ]</button>
-            <button class="btn sm">[ Appointment Help ]</button>
-            <button class="btn sm">[ Insurance Question ]</button>
+          <div class="steps">
+            <div class="step done">1 — Info Gathering</div>
+            <div class="step done">2 — Review</div>
+            <div class="step active">3 — Approval</div>
+            <div class="step">4 — Implementation</div>
+            <div class="step">5 — Monitoring</div>
+            <div class="step">6 — Completion</div>
           </div>
         </div>
-      </div>
-      <!-- DOCUMENTS -->
-      <div class="page" id="documents">
-        <div class="ph">
-          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
-          <button class="btn filled">[ + Upload Documents ]</button>
-        </div>
-        <div class="tab-bar">
-          <div class="tab active" onclick="switchTab(this,'docs-all')">All Documents (24)</div>
-          <div class="tab" onclick="switchTab(this,'docs-lab')">Lab Results (8)</div>
-          <div class="tab" onclick="switchTab(this,'docs-imaging')">Imaging (6)</div>
-          <div class="tab" onclick="switchTab(this,'docs-other')">Other (10)</div>
-        </div>
-        <div id="docs-all">
+        
+        <div class="g2">
           <div class="card">
             <div class="card-title"></div>
-            <div style="height:200px;background:var(--w-block);border:1px dashed var(--w-border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--w-label);flex-direction:column;gap:10px">
-              <div>[ Drag & Drop Files Here ]</div>
-              <button class="btn sm">[ Browse Files ]</button>
-            </div>
-          </div>
-          <div class="g3">
             <div class="li">
-              <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+              <div style="flex:1">
+                <div class="ln w80" style="margin-bottom:6px"></div>
+                <div class="lnsm w60"></div>
+                <div style="margin-top:8px"><div class="tag" style="background: var(--w-active); color: var(--w-surface);">Approved</div></div>
+              </div>
               <div class="li-acts">
-                <button class="btn sm">[ Download ]</button>
-                <button class="btn sm">[ Share ]</button>
+                <div class="lnsm w60"></div>
               </div>
             </div>
+            
             <div class="li">
-              <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
-              <div class="li-acts">
-                <button class="btn sm">[ Download ]</button>
-                <button class="btn sm">[ Share ]</button>
+              <div style="flex:1">
+                <div class="ln w80" style="margin-bottom:6px"></div>
+                <div class="lnsm w60"></div>
+                <div style="margin-top:8px"><div class="tag tagw">Pending</div></div>
               </div>
-            </div>
-            <div class="li">
-              <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
               <div class="li-acts">
-                <button class="btn sm">[ Download ]</button>
-                <button class="btn sm">[ Share ]</button>
+                <button class="btn sm">[ Remind ]</button>
               </div>
             </div>
           </div>
-        </div>
-        <div id="docs-lab" style="display:none">
-          <div class="li">
-            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
-            <button class="btn sm">[ View ]</button>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w80" style="margin: 0;"></div></div>
+              <div class="tag"></div>
+            </div>
+            <hr class="divider"/>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="txa"></div>
+            </div>
+            <button class="btn sm">[ Add Comment ]</button>
           </div>
         </div>
-        <div id="docs-imaging" style="display:none">
-          <div class="li">
-            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
-            <button class="btn sm">[ View ]</button>
-          </div>
-        </div>
-        <div id="docs-other" style="display:none">
-          <div class="li">
-            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
-            <button class="btn sm">[ View ]</button>
-          </div>
+        
+        <div class="btn-grp">
+          <button class="btn">[ Escalate ]</button>
+          <button class="btn filled" onclick="show('implementation',document.querySelectorAll('.nav-link')[15])">[ Proceed to Implementation ]</button>
         </div>
       </div>
-      <!-- PROFILE SETTINGS -->
-      <div class="page" id="profile">
+
+      <!-- IMPLEMENTATION PLANNING -->
+      <div class="page" id="implementation">
+        <div class="bc-wf"></div>
         <div class="ph">
           <div><div class="ph-title"></div><div class="ph-sub"></div></div>
-          <button class="btn filled">[ Save All Changes ]</button>
+          <button class="btn" onclick="show('approval-workflow',document.querySelectorAll('.nav-link')[14])">[ ← Back ]</button>
         </div>
-        <div class="tab-bar">
-          <div class="tab active" onclick="switchTab(this,'profile-personal')">Personal Info</div>
-          <div class="tab" onclick="switchTab(this,'profile-medical')">Medical Info</div>
-          <div class="tab" onclick="switchTab(this,'profile-notifications')">Notifications</div>
-          <div class="tab" onclick="switchTab(this,'profile-security')">Security</div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="steps">
+            <div class="step done">1 — Info Gathering</div>
+            <div class="step done">2 — Review</div>
+            <div class="step done">3 — Approval</div>
+            <div class="step active">4 — Implementation</div>
+            <div class="step">5 — Monitoring</div>
+            <div class="step">6 — Completion</div>
+          </div>
         </div>
-        <div id="profile-personal">
-          <div class="g2">
-            <div class="card">
-              <div class="card-title"></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <button class="btn filled">[ Update Personal Info ]</button>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="inp"></div>
             </div>
-            <div class="card">
-              <div class="card-title"></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-              <button class="btn">[ Update Contact Info ]</button>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="inp"></div>
+            </div>
+            
+            <div class="card" style="background: var(--w-bg); margin: 12px 0;">
+              <div class="lnsm w80" style="margin-bottom: 8px;">[ Timeline Milestones ]</div>
+              <div class="wf-row">
+                <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+                <div class="tag"></div>
+              </div>
+              <div class="wf-row">
+                <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+                <div class="tag"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="sel-grp">
+                <div class="sel-opt active" onclick="selOpt(this)">
+                  <div class="sel-dot"></div>
+                  <div class="ln w60" style="margin: 0;"></div>
+                </div>
+                <div class="sel-opt" onclick="selOpt(this)">
+                  <div class="sel-dot"></div>
+                  <div class="ln w60" style="margin: 0;"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="txa"></div>
             </div>
           </div>
         </div>
-        <div id="profile-medical" style="display:none">
-          <div class="card" style="max-width:540px">
-            <div class="card-title"></div>
-            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <button class="btn filled">[ Update Medical Info ]</button>
+        
+        <div class="btn-grp">
+          <button class="btn">[ Save Plan ]</button>
+          <button class="btn filled" onclick="show('monitoring',document.querySelectorAll('.nav-link')[16])">[ Start Implementation ]</button>
+        </div>
+      </div>
+
+      <!-- EXECUTION MONITORING -->
+      <div class="page" id="monitoring">
+        <div class="bc-wf"></div>
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('implementation',document.querySelectorAll('.nav-link')[15])">[ ← Back ]</button>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="steps">
+            <div class="step done">1 — Info Gathering</div>
+            <div class="step done">2 — Review</div>
+            <div class="step done">3 — Approval</div>
+            <div class="step done">4 — Implementation</div>
+            <div class="step active">5 — Monitoring</div>
+            <div class="step">6 — Completion</div>
           </div>
         </div>
-        <div id="profile-notifications" style="display:none">
-          <div class="card" style="max-width:540px">
-            <div class="card-title"></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
-          </div>
+        
+        <div class="g3">
+          <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+          <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+          <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
         </div>
-        <div id="profile-security" style="display:none">
-          <div class="card" style="max-width:540px">
+        
+        <div class="g2">
+          <div class="card">
             <div class="card-title"></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
-            <button class="btn filled">[ Update Password ]</button>
+            <div class="li">
+              <div style="flex:1">
+                <div class="ln w80" style="margin-bottom:6px"></div>
+                <div class="lnsm w60"></div>
+                <div style="margin-top:8px"><div class="tag" style="background: var(--w-active); color: var(--w-surface);">Complete</div></div>
+              </div>
+              <div class="li-acts">
+                <div class="lnsm w40"></div>
+              </div>
+            </div>
+            
+            <div class="li">
+              <div style="flex:1">
+                <div class="ln w80" style="margin-bottom:6px"></div>
+                <div class="lnsm w60"></div>
+                <div style="margin-top:8px"><div class="tag tagw">In Progress</div></div>
+              </div>
+              <div class="li-acts">
+                <button class="btn sm">[ Update ]</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+              <div class="tag"></div>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+              <div class="tag"></div>
+            </div>
             <hr class="divider"/>
-            <div class="card-title" style="margin-top:4px"></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
+            <button class="btn sm">[ Generate Report ]</button>
+          </div>
+        </div>
+        
+        <div class="btn-grp">
+          <button class="btn">[ Report Issue ]</button>
+          <button class="btn filled" onclick="show('completion',document.querySelectorAll('.nav-link')[17])">[ Mark Complete ]</button>
+        </div>
+      </div>
+
+      <!-- COMPLETION & REVIEW -->
+      <div class="page" id="completion">
+        <div class="bc-wf"></div>
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('experience-dashboard',document.querySelectorAll('.nav-link')[17])">[ View Experience ]</button>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="steps">
+            <div class="step done">1 — Info Gathering</div>
+            <div class="step done">2 — Review</div>
+            <div class="step done">3 — Approval</div>
+            <div class="step done">4 — Implementation</div>
+            <div class="step done">5 — Monitoring</div>
+            <div class="step active">6 — Completion</div>
+          </div>
+        </div>
+        
+        <div class="ok-wrap">
+          <div class="ok-ring">✓</div>
+          <div class="ln" style="width:200px;margin:0 auto 10px"></div>
+          <div class="lnsm" style="width:260px;margin:0 auto 24px"></div>
+        </div>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+            <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+            <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="tag" style="background: var(--w-active); color: var(--w-surface);">Success</div></div>
+            <hr class="divider"/>
+            <button class="btn sm">[ Download Report ]</button>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="txa"></div>
+            </div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="radio-grp">
+                <div class="radio-opt active" onclick="selRadio(this)">Excellent</div>
+                <div class="radio-opt" onclick="selRadio(this)">Good</div>
+                <div class="radio-opt" onclick="selRadio(this)">Fair</div>
+              </div>
+            </div>
+            <button class="btn filled">[ Submit Feedback ]</button>
+          </div>
+        </div>
+        
+        <div class="btn-grp">
+          <button class="btn" onclick="show('process-overview',document.querySelectorAll('.nav-link')[11])">[ Start New Process ]</button>
+          <button class="btn filled" onclick="show('experience-dashboard',document.querySelectorAll('.nav-link')[17])">[ View Dashboard ]</button>
+        </div>
+      </div>
+
+      <!-- EXPERIENCE DASHBOARD -->
+      <div class="page" id="experience-dashboard">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn filled" onclick="show('activity-history',document.querySelectorAll('.nav-link')[18])">[ View History ]</button>
+        </div>
+        
+        <div class="g3">
+          <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+          <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+          <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+        </div>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <button class="btn sm" onclick="show('progress-analysis',document.querySelectorAll('.nav-link')[19])">[ Analyze ]</button>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <button class="btn sm" onclick="show('progress-analysis',document.querySelectorAll('.nav-link')[19])">[ Analyze ]</button>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <button class="btn sm" onclick="show('progress-analysis',document.querySelectorAll('.nav-link')[19])">[ Analyze ]</button>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--w-block);border:1px dashed var(--w-border)">
+                <div style="width:10px;height:10px;background:var(--w-stroke);flex-shrink:0"></div>
+                <div class="ln w100" style="margin:0;flex:1"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--w-block);border:1px dashed var(--w-border)">
+                <div style="width:10px;height:10px;background:var(--w-stroke);flex-shrink:0"></div>
+                <div class="ln w100" style="margin:0;flex:1"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- ACTIVITY HISTORY -->
+      <div class="page" id="activity-history">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('experience-dashboard',document.querySelectorAll('.nav-link')[17])">[ ← Dashboard ]</button>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="fgrp">
+            <div class="inp" style="max-width: 300px;"></div>
+          </div>
+          <div class="btn-grp">
+            <button class="btn sm">[ Filter: All ]</button>
+            <button class="btn sm">[ Filter: Processes ]</button>
+            <button class="btn sm">[ Filter: Support ]</button>
+            <button class="btn sm">[ Export ]</button>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="li">
+            <div style="flex:1">
+              <div class="ln w80" style="margin-bottom:6px"></div>
+              <div class="lnsm w60"></div>
+              <div style="margin-top:8px"><div class="tag"></div></div>
+            </div>
+            <div class="li-acts">
+              <div class="lnsm w40"></div>
+              <button class="btn sm">[ View Details ]</button>
+            </div>
+          </div>
+          
+          <div class="li">
+            <div style="flex:1">
+              <div class="ln w80" style="margin-bottom:6px"></div>
+              <div class="lnsm w60"></div>
+              <div style="margin-top:8px"><div class="tag"></div></div>
+            </div>
+            <div class="li-acts">
+              <div class="lnsm w40"></div>
+              <button class="btn sm">[ View Details ]</button>
+            </div>
+          </div>
+          
+          <div class="li">
+            <div style="flex:1">
+              <div class="ln w80" style="margin-bottom:6px"></div>
+              <div class="lnsm w60"></div>
+              <div style="margin-top:8px"><div class="tag"></div></div>
+            </div>
+            <div class="li-acts">
+              <div class="lnsm w40"></div>
+              <button class="btn sm">[ View Details ]</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="btn-grp">
+          <button class="btn" onclick="show('pattern-recognition',document.querySelectorAll('.nav-link')[20])">[ Analyze Patterns ]</button>
+          <button class="btn filled" onclick="show('progress-analysis',document.querySelectorAll('.nav-link')[19])">[ View Progress ]</button>
+        </div>
+      </div>
+
+      <!-- PROGRESS ANALYSIS -->
+      <div class="page" id="progress-analysis">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('activity-history',document.querySelectorAll('.nav-link')[18])">[ ← Back ]</button>
+        </div>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+            <hr class="divider"/>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+              <div class="tag" style="background: var(--w-active); color: var(--w-surface);">85%</div>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+              <div class="tag">65%</div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div style="height: 120px; background: var(--w-block); border: 1px solid var(--w-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--w-label);">
+              [ Progress Chart Visualization ]
+            </div>
+            <div class="btn-grp">
+              <button class="btn sm">[ Week ]</button>
+              <button class="btn sm">[ Month ]</button>
+              <button class="btn sm">[ Year ]</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="g3">
+            <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+            <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+            <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+          </div>
+        </div>
+        
+        <div class="btn-grp">
+          <button class="btn" onclick="show('pattern-recognition',document.querySelectorAll('.nav-link')[20])">[ View Patterns ]</button>
+          <button class="btn filled" onclick="show('future-planning',document.querySelectorAll('.nav-link')[21])">[ Plan Future ]</button>
+        </div>
+      </div>
+
+      <!-- PATTERN RECOGNITION -->
+      <div class="page" id="pattern-recognition">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('progress-analysis',document.querySelectorAll('.nav-link')[19])">[ ← Back ]</button>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="wf-row">
+            <div class="row-l">
+              <div class="ln w100" style="margin-bottom: 4px;"></div>
+              <div class="lnsm w80"></div>
+              <div class="lnsm w60" style="margin-top: 4px;"></div>
+            </div>
+            <div class="tag" style="background: var(--w-active); color: var(--w-surface);">High</div>
+          </div>
+          
+          <div class="wf-row">
+            <div class="row-l">
+              <div class="ln w100" style="margin-bottom: 4px;"></div>
+              <div class="lnsm w80"></div>
+              <div class="lnsm w60" style="margin-top: 4px;"></div>
+            </div>
+            <div class="tag">Medium</div>
+          </div>
+          
+          <div class="wf-row">
+            <div class="row-l">
+              <div class="ln w100" style="margin-bottom: 4px;"></div>
+              <div class="lnsm w80"></div>
+              <div class="lnsm w60" style="margin-top: 4px;"></div>
+            </div>
+            <div class="tag">Low</div>
+          </div>
+        </div>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div style="height: 100px; background: var(--w-block); border: 1px solid var(--w-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--w-label);">
+              [ Usage Pattern Visualization ]
+            </div>
+            <div class="lnsm w100"></div>
+            <div class="lnsm w80" style="margin-top: 4px;"></div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+              <button class="btn sm">[ Optimize ]</button>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+              <button class="btn sm">[ Optimize ]</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="btn-grp">
+          <button class="btn" onclick="show('activity-history',document.querySelectorAll('.nav-link')[18])">[ View History ]</button>
+          <button class="btn filled" onclick="show('future-planning',document.querySelectorAll('.nav-link')[21])">[ Apply Insights ]</button>
+        </div>
+      </div>
+
+      <!-- FUTURE PLANNING -->
+      <div class="page" id="future-planning">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('pattern-recognition',document.querySelectorAll('.nav-link')[20])">[ ← Back ]</button>
+        </div>
+        
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="inp"></div>
+            </div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="inp"></div>
+            </div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="txa"></div>
+            </div>
+            
+            <div class="card" style="background: var(--w-bg); margin: 12px 0;">
+              <div class="lnsm w80" style="margin-bottom: 8px;">[ AI Recommendations ]</div>
+              <div class="wf-row">
+                <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+                <button class="btn sm">[ Apply ]</button>
+              </div>
+              <div class="wf-row">
+                <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+                <button class="btn sm">[ Apply ]</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+            <hr class="divider"/>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+              <div class="tag"></div>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+              <div class="tag"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="tab-bar">
+            <div class="tab active" onclick="switchTab(this,'plan-goals')">Goals</div>
+            <div class="tab" onclick="switchTab(this,'plan-timeline')">Timeline</div>
+            <div class="tab" onclick="switchTab(this,'plan-resources')">Resources</div>
+          </div>
+          
+          <div id="plan-goals">
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="inp"></div>
+            </div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="inp"></div>
+            </div>
+          </div>
+          
+          <div id="plan-timeline" style="display:none">
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+              <div class="tag"></div>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w60" style="margin: 0 0 4px 0;"></div><div class="lnsm w40" style="margin: 0;"></div></div>
+              <div class="tag"></div>
+            </div>
+          </div>
+          
+          <div id="plan-resources" style="display:none">
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <button class="btn sm">[ Allocate ]</button>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <button class="btn sm">[ Allocate ]</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="btn-grp">
+          <button class="btn">[ Save Draft ]</button>
+          <button class="btn filled" onclick="show('experience-dashboard',document.querySelectorAll('.nav-link')[17])">[ Create Plan ]</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
+
 <script>
   function show(id, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -909,27 +1455,7 @@
     document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
     if (el) el.classList.add('active');
   }
-  function goRegStep(n) {
-    [1,2,3,4].forEach(i => {
-      document.getElementById('reg-'+i).style.display = i===n?'block':'none';
-      var s = document.getElementById('reg-stp'+i);
-      s.className = 'step'+(i<n?' done':i===n?' active':'');
-    });
-  }
-  function goBookStep(n) {
-    [1,2,3,4].forEach(i => {
-      document.getElementById('bk-'+i).style.display = i===n?'block':'none';
-      var s = document.getElementById('bk-stp'+i);
-      s.className = 'step'+(i<n?' done':i===n?' active':'');
-    });
-  }
-  function goHealthStep(n) {
-    [1,2,3,4,5].forEach(i => {
-      document.getElementById('ha-'+i).style.display = i===n?'block':'none';
-      var s = document.getElementById('ha-stp'+i);
-      s.className = 'step'+(i<n?' done':i===n?' active':'');
-    });
-  }
+
   function switchTab(el, panelId) {
     el.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
@@ -938,45 +1464,53 @@
     var t = document.getElementById(panelId);
     if (t) t.style.display = 'block';
   }
+
   function selOpt(el) {
     el.parentElement.querySelectorAll('.sel-opt').forEach(o => o.classList.remove('active'));
     el.classList.add('active');
   }
+
   function selRadio(el) {
     el.parentElement.querySelectorAll('.radio-opt').forEach(o => o.classList.remove('active'));
     el.classList.add('active');
   }
-  function selSlot(el) {
-    if (el.classList.contains('full')) return;
-    el.parentElement.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
-    el.classList.add('selected');
-  }
 </script>
+
 </body>
 </html>
 
 <!--
 SUMMARY TABLE:
 Step → Screen Name → File Reference → Navigates To
-1.0 → Landing/Dashboard → #dashboard → Appointments, Book Appointment, Messages
-1.1 → Patient Registration Step 1 → #registration #reg-1 → Registration Step 2
-1.2 → Patient Registration Step 2 → #registration #reg-2 → Registration Step 3
-1.3 → Patient Registration Step 3 → #registration #reg-3 → Registration Step 4
-1.4 → Patient Registration Step 4 → #registration #reg-4 → Dashboard
-2.0 → User Login → #login → Dashboard, Registration
-3.0 → My Appointments → #appointments → Book Appointment, Dashboard
-4.0 → Book Appointment Step 1 → #book-appointment #bk-1 → Book Appointment Step 2
-4.1 → Book Appointment Step 2 → #book-appointment #bk-2 → Book Appointment Step 3
-4.2 → Book Appointment Step 3 → #book-appointment #bk-3 → Book Appointment Step 4
-4.3 → Book Appointment Step 4 → #book-appointment #bk-4 → Dashboard
-5.0 → Health Assessment Step 1 → #health-assessment #ha-1 → Health Assessment Step 2
-5.1 → Health Assessment Step 2 → #health-assessment #ha-2 → Health Assessment Step 3
-5.2 → Health Assessment Step 3 → #health-assessment #ha-3 → Health Assessment Step 4
-5.3 → Health Assessment Step 4 → #health-assessment #ha-4 → Health Assessment Step 5
-5.4 → Health Assessment Step 5 → #health-assessment #ha-5 → Dashboard
-6.0 → Test Results → #test-results → Messages, Appointments
-7.0 → Secure Messages → #messages → Dashboard
-8.0 → Live Chat Support → #chat-support → Dashboard
-9.0 → Document Management → #documents → Dashboard
-10.0 → Profile Settings → #profile → Dashboard
+
+Discovery & Authentication Flow:
+1.0 → Landing Page → wireframe.html#landing → Authentication Entry
+2.0 → Authentication Entry → wireframe.html#auth-entry → Username Creation
+3.0 → Username Creation → wireframe.html#username → Verification Method
+4.0 → Verification Method → wireframe.html#verification → Password Creation
+5.0 → Password Creation → wireframe.html#password → Welcome Dashboard
+6.0 → Welcome Dashboard → wireframe.html#welcome → Process Overview / Help
+
+Interactive Communication Flow:
+7.0 → Help Initiation → wireframe.html#help-init → Chat Interface
+8.0 → Chat Interface → wireframe.html#chat-interface → Problem Diagnosis
+9.0 → Problem Diagnosis → wireframe.html#problem-diagnosis → Solution Delivery
+10.0 → Solution Delivery → wireframe.html#solution-delivery → Resolution Confirmation
+11.0 → Resolution Confirmation → wireframe.html#resolution → Welcome Dashboard
+
+Multi-Step Process Management Flow:
+12.0 → Process Overview → wireframe.html#process-overview → Info Gathering
+13.0 → Info Gathering → wireframe.html#info-gathering → Review & Validation
+14.0 → Review & Validation → wireframe.html#review-validation → Approval Workflow
+15.0 → Approval Workflow → wireframe.html#approval-workflow → Implementation Planning
+16.0 → Implementation Planning → wireframe.html#implementation → Execution Monitoring
+17.0 → Execution Monitoring → wireframe.html#monitoring → Completion & Review
+18.0 → Completion & Review → wireframe.html#completion → Experience Dashboard
+
+Experience History & Progress Tracking Flow:
+19.0 → Experience Dashboard → wireframe.html#experience-dashboard → Activity History
+20.0 → Activity History → wireframe.html#activity-history → Progress Analysis
+21.0 → Progress Analysis → wireframe.html#progress-analysis → Pattern Recognition
+22.0 → Pattern Recognition → wireframe.html#pattern-recognition → Future Planning
+23.0 → Future Planning → wireframe.html#future-planning → Experience Dashboard
 -->
