@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HealthConnect — Wireframe</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --w-bg:      #f2f2f2;
+    --w-surface: #e8e8e8;
+    --w-block:   #d4d4d4;
+    --w-dark:    #b0b0b0;
+    --w-border:  #999999;
+    --w-stroke:  #777777;
+    --w-text:    #444444;
+    --w-label:   #888888;
+    --w-active:  #555555;
+  }
+  html, body { height: 100%; font-family: 'Courier New', Courier, monospace; background: var(--w-bg); color: var(--w-text); font-size: 12px; }
+  /* LAYOUT */
+  #app     { display: flex; height: 100vh; overflow: hidden; }
+  #sidebar { width: 220px; flex-shrink: 0; background: var(--w-surface); border-right: 2px solid var(--w-border); display: flex; flex-direction: column; overflow-y: auto; }
+  #main    { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  #topbar  { height: 52px; flex-shrink: 0; background: var(--w-surface); border-bottom: 2px solid var(--w-border); display: flex; align-items: center; padding: 0 20px; gap: 12px; justify-content: space-between; }
+  #content { flex: 1; overflow-y: auto; background: var(--w-bg); }
+  /* SIDEBAR */
+  .sb-logo     { padding: 16px 18px; border-bottom: 1px dashed var(--w-border); }
+  .sb-logo-box { background: var(--w-block); border: 1px solid var(--w-border); height: 28px; display: flex; align-items: center; padding: 0 10px; font-size: 11px; color: var(--w-text); }
+  .sb-section  { padding: 12px 18px 4px; font-size: 9px; letter-spacing: .15em; text-transform: uppercase; color: var(--w-label); border-bottom: 1px dashed var(--w-dark); }
+  .nav-link    { display: flex; align-items: center; gap: 8px; padding: 8px 18px; cursor: pointer; font-size: 11px; color: var(--w-label); border-left: 3px solid transparent; }
+  .nav-link:hover   { background: var(--w-block); color: var(--w-text); }
+  .nav-link.active  { border-left-color: var(--w-stroke); background: var(--w-block); color: var(--w-text); font-weight: bold; }
+  .nav-icon    { width: 10px; height: 10px; background: var(--w-dark); flex-shrink: 0; }
+  .sb-footer   { margin-top: auto; padding: 12px 18px; border-top: 1px dashed var(--w-border); display: flex; flex-direction: column; gap: 5px; }
+  .sb-fline    { height: 8px; background: var(--w-block); border: 1px solid var(--w-border); }
+  /* TOPBAR */
+  .search-wf    { flex: 1; max-width: 320px; height: 30px; background: var(--w-block); border: 1px dashed var(--w-border); display: flex; align-items: center; padding: 0 10px; font-size: 10px; color: var(--w-label); }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .notif-wf     { height: 28px; width: 90px; background: var(--w-block); border: 1px solid var(--w-border); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--w-label); }
+  .avatar-wf    { width: 28px; height: 28px; border-radius: 50%; background: var(--w-dark); border: 1px solid var(--w-border); display: flex; align-items: center; justify-content: center; font-size: 9px; color: var(--w-surface); }
+  .topbar-name  { height: 12px; width: 90px; background: var(--w-block); border: 1px solid var(--w-border); }
+  /* PAGES */
+  .page        { display: none; padding: 24px 28px; }
+  .page.active { display: block; }
+  /* PAGE HEADER */
+  .ph       { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+  .ph-title { height: 22px; width: 220px; background: var(--w-block); border: 1px solid var(--w-border); margin-bottom: 6px; }
+  .ph-sub   { height: 10px; width: 300px; background: var(--w-surface); border: 1px dashed var(--w-border); }
+  .bc-wf    { height: 8px; width: 180px; background: var(--w-surface); border: 1px dashed var(--w-border); margin-bottom: 10px; }
+  /* GRIDS */
+  .g3 { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-bottom: 14px; }
+  .g2 { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin-bottom: 14px; }
+  @media (max-width: 860px) { .g3,.g2 { grid-template-columns: 1fr; } }
+  /* CARDS */
+  .card       { background: var(--w-surface); border: 1px solid var(--w-border); padding: 14px 16px; margin-bottom: 14px; }
+  .card-title { height: 9px; width: 120px; background: var(--w-dark); border: 1px solid var(--w-border); margin-bottom: 12px; }
+  /* STAT CARD */
+  .stat      { background: var(--w-surface); border: 1px solid var(--w-border); padding: 14px 16px; }
+  .s-label   { height: 8px; width: 100px; background: var(--w-dark); border: 1px solid var(--w-border); margin-bottom: 10px; }
+  .s-val     { height: 30px; width: 80px; background: var(--w-block); border: 1px solid var(--w-border); margin-bottom: 6px; }
+  .s-sub     { height: 8px; width: 130px; background: var(--w-surface); border: 1px dashed var(--w-border); }
+  /* LINES */
+  .ln    { height: 10px; background: var(--w-block); border: 1px solid var(--w-border); margin-bottom: 6px; }
+  .lnsm  { height: 8px; background: var(--w-surface); border: 1px dashed var(--w-border); margin-bottom: 5px; }
+  .w100  { width:100%; } .w80 { width:80%; } .w60 { width:60%; } .w40 { width:40%; } .w30 { width:30%; }
+  /* ROW */
+  .wf-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--w-border); }
+  .wf-row:last-child { border-bottom: none; }
+  .row-l  { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  /* BUTTONS */
+  .btn  { display: inline-flex; align-items: center; justify-content: center; height: 30px; min-width: 80px; background: var(--w-block); border: 1.5px solid var(--w-stroke); cursor: pointer; font-size: 10px; color: var(--w-text); font-family: inherit; padding: 0 14px; white-space: nowrap; }
+  .btn:hover   { background: var(--w-dark); }
+  .btn.filled  { background: var(--w-active); color: var(--w-surface); border-color: var(--w-stroke); }
+  .btn.sm      { height: 24px; min-width: 50px; font-size: 9px; padding: 0 8px; }
+  .btn-grp     { display: flex; gap: 8px; flex-wrap: wrap; }
+  /* TAGS */
+  .tag  { display: inline-block; height: 16px; width: 55px; background: var(--w-block); border: 1px solid var(--w-border); vertical-align: middle; }
+  .tagw { width: 100px; }
+  /* INPUTS */
+  .inp  { width: 100%; height: 30px; background: var(--w-block); border: 1px dashed var(--w-border); margin-bottom: 4px; }
+  .txa  { width: 100%; height: 70px; background: var(--w-block); border: 1px dashed var(--w-border); margin-bottom: 4px; }
+  .lbl  { height: 8px; width: 80px; background: var(--w-dark); border: 1px solid var(--w-border); margin-bottom: 5px; }
+  .fgrp { margin-bottom: 12px; }
+  /* TABS */
+  .tab-bar { display: flex; border-bottom: 2px solid var(--w-border); margin-bottom: 14px; gap: 2px; }
+  .tab     { height: 32px; min-width: 90px; background: var(--w-surface); border: 1px solid var(--w-border); border-bottom: none; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; color: var(--w-label); padding: 0 14px; }
+  .tab:hover   { background: var(--w-block); }
+  .tab.active  { background: var(--w-block); color: var(--w-text); font-weight: bold; border-bottom: 2px solid var(--w-surface); }
+  /* STEPS */
+  .steps { display: flex; margin-bottom: 20px; }
+  .step  { flex: 1; height: 32px; background: var(--w-surface); border: 1px solid var(--w-border); border-right: none; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--w-label); }
+  .step:last-child { border-right: 1px solid var(--w-border); }
+  .step.active { background: var(--w-active); color: var(--w-surface); font-weight: bold; }
+  .step.done   { background: var(--w-block);  color: var(--w-text);    font-weight: bold; }
+  /* SLOTS */
+  .slot-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .slot      { height: 28px; width: 72px; background: var(--w-block); border: 1px solid var(--w-border); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--w-text); cursor: pointer; }
+  .slot:hover     { background: var(--w-dark); }
+  .slot.selected  { background: var(--w-active); color: var(--w-surface); border-color: var(--w-stroke); }
+  .slot.full      { background: var(--w-surface); color: var(--w-label); cursor: not-allowed; text-decoration: line-through; }
+  /* SELECT OPTS */
+  .sel-grp { display: flex; flex-direction: column; gap: 5px; }
+  .sel-opt { height: 30px; background: var(--w-block); border: 1px solid var(--w-border); display: flex; align-items: center; padding: 0 10px; font-size: 10px; cursor: pointer; gap: 8px; }
+  .sel-opt:hover  { background: var(--w-dark); }
+  .sel-opt.active { border: 1.5px solid var(--w-stroke); background: var(--w-dark); font-weight: bold; }
+  .sel-dot        { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--w-stroke); flex-shrink: 0; background: var(--w-surface); }
+  .sel-opt.active .sel-dot { background: var(--w-stroke); }
+  /* RADIO */
+  .radio-grp { display: flex; gap: 6px; flex-wrap: wrap; }
+  .radio-opt { height: 28px; padding: 0 14px; background: var(--w-block); border: 1px solid var(--w-border); display: flex; align-items: center; font-size: 10px; cursor: pointer; }
+  .radio-opt:hover  { background: var(--w-dark); }
+  .radio-opt.active { border: 1.5px solid var(--w-stroke); font-weight: bold; background: var(--w-dark); }
+  /* LIST ITEM */
+  .li      { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--w-border); background: var(--w-surface); margin-bottom: 8px; gap: 12px; }
+  .li-acts { display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; }
+  /* TOGGLE */
+  .tog-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px dashed var(--w-border); }
+  .tog-row:last-child { border-bottom: none; }
+  .tog     { width: 34px; height: 18px; border: 1.5px solid var(--w-border); background: var(--w-block); display: flex; align-items: center; padding: 0 2px; cursor: pointer; flex-shrink: 0; }
+  .tog::after { content:''; width:12px; height:12px; background:var(--w-dark); border:1px solid var(--w-border); transition:margin .15s; }
+  .tog.on  { background: var(--w-dark); }
+  .tog.on::after { margin-left: 14px; background: var(--w-surface); }
+  /* MESSAGE */
+  .msg-bub { background: var(--w-block); border: 1px solid var(--w-border); padding: 12px 14px; margin-bottom: 12px; }
+  .msg-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px dashed var(--w-border); cursor: pointer; }
+  .msg-row:hover { background: var(--w-block); }
+  .msg-row:last-child { border-bottom: none; }
+  /* SUCCESS */
+  .ok-wrap  { text-align: center; padding: 36px 24px; max-width: 440px; margin: 0 auto; }
+  .ok-ring  { width: 52px; height: 52px; border: 2px solid var(--w-stroke); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 22px; color: var(--w-stroke); }
+  .cbox     { background: var(--w-bg); border: 1px dashed var(--w-border); padding: 14px 16px; margin-bottom: 12px; }
+  .divider  { border: none; border-top: 1px dashed var(--w-border); margin: 12px 0; }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-box">[ LOGO — HealthConnect ]</div>
+    </div>
+    <div class="sb-section">Patient Portal</div>
+    <div class="nav-link active" onclick="show('dashboard',this)"><div class="nav-icon"></div>Dashboard</div>
+    <div class="nav-link" onclick="show('appointments',this)"><div class="nav-icon"></div>My Appointments</div>
+    <div class="nav-link" onclick="show('book-appointment',this)"><div class="nav-icon"></div>Book Appointment</div>
+    <div class="nav-link" onclick="show('health-assessment',this)"><div class="nav-icon"></div>Health Assessment</div>
+    <div class="nav-link" onclick="show('test-results',this)"><div class="nav-icon"></div>Test Results</div>
+    <div class="sb-section">Communication</div>
+    <div class="nav-link" onclick="show('messages',this)"><div class="nav-icon"></div>Messages</div>
+    <div class="nav-link" onclick="show('chat-support',this)"><div class="nav-icon"></div>Live Chat</div>
+    <div class="sb-section">Account</div>
+    <div class="nav-link" onclick="show('documents',this)"><div class="nav-icon"></div>Documents</div>
+    <div class="nav-link" onclick="show('profile',this)"><div class="nav-icon"></div>Profile Settings</div>
+    <div class="nav-link" onclick="show('registration',this)"><div class="nav-icon"></div>Registration</div>
+    <div class="nav-link" onclick="show('login',this)"><div class="nav-icon"></div>Login</div>
+    <div class="sb-footer">
+      <div style="font-size:10px;color:var(--w-label);line-height:1.9">
+        <div style="font-weight:bold;color:var(--w-text);margin-bottom:2px">HealthConnect v3.1.2</div>
+        <div>HIPAA Compliant &nbsp;·&nbsp; 256-bit TLS</div>
+        <div>&copy; 2024 HealthConnect Inc.</div>
+      </div>
+    </div>
+  </div>
+  <!-- MAIN -->
+  <div id="main">
+    <div id="topbar">
+      <div class="search-wf">[ Search patients, appointments, docs... ]</div>
+      <div class="topbar-right">
+        <div class="notif-wf">[ Bell / Alerts ]</div>
+        <div class="avatar-wf">SJ</div>
+        <div class="topbar-name"></div>
+      </div>
+    </div>
+    <div id="content">
+      <!-- DASHBOARD -->
+      <div class="page active" id="dashboard">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn filled" onclick="show('book-appointment',document.querySelectorAll('.nav-link')[2])">[ + Book Appointment ]</button>
+        </div>
+        <div class="g3">
+          <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+          <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+          <div class="stat"><div class="s-label"></div><div class="s-val"></div><div class="s-sub"></div></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <button class="btn sm" onclick="show('appointments',document.querySelectorAll('.nav-link')[1])">[ View ]</button>
+            </div>
+            <div class="wf-row">
+              <div class="row-l"><div class="ln w80"></div><div class="lnsm w60"></div></div>
+              <button class="btn sm" onclick="show('appointments',document.querySelectorAll('.nav-link')[1])">[ Reschedule ]</button>
+            </div>
+            <div style="margin-top:10px">
+              <button class="btn" onclick="show('book-appointment',document.querySelectorAll('.nav-link')[2])">[ + Book New ]</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="wf-row"><div class="ln w60" style="margin:0"></div><div class="tag"></div></div>
+            <div class="wf-row"><div class="ln w60" style="margin:0"></div><div class="tag"></div></div>
+            <div class="wf-row">
+              <div class="ln w60" style="margin:0"></div>
+              <button class="btn sm" onclick="show('test-results',document.querySelectorAll('.nav-link')[4])">[ View Results ]</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--w-block);border:1px dashed var(--w-border)">
+              <div style="width:10px;height:10px;background:var(--w-stroke);flex-shrink:0"></div>
+              <div class="ln w100" style="margin:0;flex:1"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--w-block);border:1px dashed var(--w-border)">
+              <div style="width:10px;height:10px;background:var(--w-stroke);flex-shrink:0"></div>
+              <div class="ln w100" style="margin:0;flex:1"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--w-block);border:1px dashed var(--w-border)">
+              <div style="width:10px;height:10px;background:var(--w-stroke);flex-shrink:0"></div>
+              <div class="ln w100" style="margin:0;flex:1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- PATIENT REGISTRATION -->
+      <div class="page" id="registration">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('login',document.querySelectorAll('.nav-link')[11])">[ Already have account? ]</button>
+        </div>
+        <div class="steps">
+          <div class="step active" id="reg-stp1">1 — Basic Info</div>
+          <div class="step" id="reg-stp2">2 — Contact</div>
+          <div class="step" id="reg-stp3">3 — Verification</div>
+          <div class="step" id="reg-stp4">4 — Health Profile</div>
+        </div>
+        <!-- Step 1 -->
+        <div id="reg-1">
+          <div class="g2">
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            </div>
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="radio-grp">
+                <div class="radio-opt active" onclick="selRadio(this)">Email</div>
+                <div class="radio-opt" onclick="selRadio(this)">Google</div>
+                <div class="radio-opt" onclick="selRadio(this)">Apple</div>
+              </div>
+            </div>
+          </div>
+          <button class="btn filled" onclick="goRegStep(2)">[ Next: Contact Info → ]</button>
+        </div>
+        <!-- Step 2 -->
+        <div id="reg-2" style="display:none">
+          <div class="card" style="max-width:540px">
+            <div class="card-title"></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+          </div>
+          <div class="btn-grp">
+            <button class="btn" onclick="goRegStep(1)">[ ← Back ]</button>
+            <button class="btn filled" onclick="goRegStep(3)">[ Verify Contact → ]</button>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div id="reg-3" style="display:none">
+          <div class="card" style="max-width:440px;margin:0 auto;text-align:center">
+            <div class="card-title" style="margin:0 auto 16px"></div>
+            <div class="lnsm w80" style="margin:0 auto 20px"></div>
+            <div style="display:flex;justify-content:center;gap:8px;margin-bottom:20px">
+              <div class="inp" style="width:40px;text-align:center"></div>
+              <div class="inp" style="width:40px;text-align:center"></div>
+              <div class="inp" style="width:40px;text-align:center"></div>
+              <div class="inp" style="width:40px;text-align:center"></div>
+              <div class="inp" style="width:40px;text-align:center"></div>
+              <div class="inp" style="width:40px;text-align:center"></div>
+            </div>
+            <div class="lnsm w60" style="margin:0 auto 16px"></div>
+            <button class="btn sm">[ Resend Code ]</button>
+          </div>
+          <div class="btn-grp" style="justify-content:center">
+            <button class="btn" onclick="goRegStep(2)">[ ← Back ]</button>
+            <button class="btn filled" onclick="goRegStep(4)">[ Verify & Continue → ]</button>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div id="reg-4" style="display:none">
+          <div class="g2">
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            </div>
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            </div>
+          </div>
+          <div class="btn-grp">
+            <button class="btn" onclick="goRegStep(3)">[ ← Back ]</button>
+            <button class="btn filled" onclick="show('dashboard',document.querySelectorAll('.nav-link')[0])">[ Complete Registration ]</button>
+          </div>
+        </div>
+      </div>
+      <!-- LOGIN -->
+      <div class="page" id="login">
+        <div class="ok-wrap">
+          <div class="card-title" style="width:160px;margin:0 auto 20px"></div>
+          <div class="card" style="text-align:left">
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <label style="display:flex;align-items:center;gap:6px;font-size:10px">
+                <div style="width:12px;height:12px;border:1px solid var(--w-border);background:var(--w-block)"></div>
+                Remember me
+              </label>
+              <div class="lnsm w60"></div>
+            </div>
+            <button class="btn filled w100" onclick="show('dashboard',document.querySelectorAll('.nav-link')[0])">[ Sign In ]</button>
+            <hr class="divider"/>
+            <div class="btn-grp" style="justify-content:center">
+              <button class="btn sm">[ Google ]</button>
+              <button class="btn sm">[ Apple ]</button>
+              <button class="btn sm">[ Facebook ]</button>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:16px">
+            <div class="lnsm w80" style="margin:0 auto 8px"></div>
+            <button class="btn" onclick="show('registration',document.querySelectorAll('.nav-link')[10])">[ Create New Account ]</button>
+          </div>
+        </div>
+      </div>
+      <!-- APPOINTMENTS -->
+      <div class="page" id="appointments">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn filled" onclick="show('book-appointment',document.querySelectorAll('.nav-link')[2])">[ + Book New ]</button>
+        </div>
+        <div class="tab-bar">
+          <div class="tab active" onclick="switchTab(this,'apt-up')">Upcoming (3)</div>
+          <div class="tab" onclick="switchTab(this,'apt-past')">Past (12)</div>
+          <div class="tab" onclick="switchTab(this,'apt-cancel')">Cancelled (2)</div>
+        </div>
+        <div id="apt-up">
+          <div class="li">
+            <div style="flex:1">
+              <div class="ln w80" style="margin-bottom:6px"></div>
+              <div class="lnsm w60"></div>
+              <div style="display:flex;gap:6px;margin-top:8px"><div class="tag"></div><div class="tag tagw"></div></div>
+            </div>
+            <div class="li-acts">
+              <button class="btn sm">[ Reschedule ]</button>
+              <button class="btn sm">[ Cancel ]</button>
+              <button class="btn sm">[ Add to Cal ]</button>
+            </div>
+          </div>
+          <div class="li">
+            <div style="flex:1">
+              <div class="ln w80" style="margin-bottom:6px"></div>
+              <div class="lnsm w60"></div>
+              <div style="display:flex;gap:6px;margin-top:8px"><div class="tag"></div><div class="tag tagw"></div></div>
+            </div>
+            <div class="li-acts">
+              <button class="btn sm">[ Reschedule ]</button>
+              <button class="btn sm">[ Cancel ]</button>
+              <button class="btn sm">[ Join Video ]</button>
+            </div>
+          </div>
+          <div class="li">
+            <div style="flex:1">
+              <div class="ln w80" style="margin-bottom:6px"></div>
+              <div class="lnsm w60"></div>
+              <div style="display:flex;gap:6px;margin-top:8px"><div class="tag"></div><div class="tag tagw"></div></div>
+            </div>
+            <div class="li-acts">
+              <button class="btn sm">[ Reschedule ]</button>
+              <button class="btn sm">[ Cancel ]</button>
+              <button class="btn sm">[ Pre-Visit Form ]</button>
+            </div>
+          </div>
+        </div>
+        <div id="apt-past" style="display:none">
+          <div class="li">
+            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+            <button class="btn sm">[ View Summary ]</button>
+          </div>
+          <div class="li">
+            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+            <button class="btn sm">[ View Summary ]</button>
+          </div>
+        </div>
+        <div id="apt-cancel" style="display:none">
+          <div class="li">
+            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag tagw"></div></div></div>
+            <button class="btn sm" onclick="show('book-appointment',document.querySelectorAll('.nav-link')[2])">[ Rebook ]</button>
+          </div>
+        </div>
+      </div>
+      <!-- BOOK APPOINTMENT -->
+      <div class="page" id="book-appointment">
+        <div class="bc-wf"></div>
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn" onclick="show('dashboard',document.querySelectorAll('.nav-link')[0])">[ ← Cancel ]</button>
+        </div>
+        <div class="steps">
+          <div class="step active" id="bk-stp1">1 — Choose Provider</div>
+          <div class="step" id="bk-stp2">2 — Date & Time</div>
+          <div class="step" id="bk-stp3">3 — Details</div>
+          <div class="step" id="bk-stp4">4 — Confirm</div>
+        </div>
+        <!-- Step 1 -->
+        <div id="bk-1">
+          <div class="g2">
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="sel-grp">
+                <div class="sel-opt active" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w60" style="margin:0"></div></div>
+                <div class="sel-opt" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w60" style="margin:0"></div></div>
+                <div class="sel-opt" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w60" style="margin:0"></div></div>
+                <div class="sel-opt" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w60" style="margin:0"></div></div>
+              </div>
+            </div>
+            <div>
+              <div class="card">
+                <div class="card-title"></div>
+                <div class="sel-grp">
+                  <div class="sel-opt active" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w80" style="margin:0"></div></div>
+                  <div class="sel-opt" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w80" style="margin:0"></div></div>
+                  <div class="sel-opt" onclick="selOpt(this)"><div class="sel-dot"></div><div class="ln w80" style="margin:0"></div></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-title"></div>
+                <div class="radio-grp">
+                  <div class="radio-opt active" onclick="selRadio(this)">In-Person</div>
+                  <div class="radio-opt" onclick="selRadio(this)">Video Call</div>
+                  <div class="radio-opt" onclick="selRadio(this)">Phone Call</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn filled" onclick="goBookStep(2)">[ Next: Date & Time → ]</button>
+        </div>
+        <!-- Step 2 -->
+        <div id="bk-2" style="display:none">
+          <div class="g2">
+            <div class="card">
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp">
+                <div class="lbl"></div>
+                <div class="slot-grid">
+                  <div class="slot selected" onclick="selSlot(this)">9:00 AM</div>
+                  <div class="slot" onclick="selSlot(this)">10:30 AM</div>
+                  <div class="slot" onclick="selSlot(this)">2:00 PM</div>
+                  <div class="slot" onclick="selSlot(this)">3:30 PM</div>
+                  <div class="slot full">4:00 PM</div>
+                  <div class="slot" onclick="selSlot(this)">5:00 PM</div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="tag"></div></div>
+            </div>
+          </div>
+          <div class="btn-grp">
+            <button class="btn" onclick="goBookStep(1)">[ ← Back ]</button>
+            <button class="btn filled" onclick="goBookStep(3)">[ Next: Details → ]</button>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div id="bk-3" style="display:none">
+          <div class="card" style="max-width:540px">
+            <div class="card-title"></div>
+            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+          </div>
+          <div class="btn-grp">
+            <button class="btn" onclick="goBookStep(2)">[ ← Back ]</button>
+            <button class="btn filled" onclick="goBookStep(4)">[ Review & Confirm → ]</button>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div id="bk-4" style="display:none">
+          <div class="ok-wrap">
+            <div class="ok-ring">&#10003;</div>
+            <div class="ln" style="width:200px;margin:0 auto 10px"></div>
+            <div class="lnsm" style="width:260px;margin:0 auto 24px"></div>
+            <div class="cbox" style="text-align:left">
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w30" style="margin:0"></div><div class="ln w40" style="margin:0"></div></div>
+            </div>
+            <div class="btn-grp" style="justify-content:center;margin-top:16px">
+              <button class="btn" onclick="goBookStep(1)">[ Book Another ]</button>
+              <button class="btn filled" onclick="show('dashboard',document.querySelectorAll('.nav-link')[0])">[ Dashboard ]</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- HEALTH ASSESSMENT -->
+      <div class="page" id="health-assessment">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn filled">[ Save Progress ]</button>
+        </div>
+        <div class="steps">
+          <div class="step active" id="ha-stp1">1 — Basic Health</div>
+          <div class="step" id="ha-stp2">2 — Lifestyle</div>
+          <div class="step" id="ha-stp3">3 — Symptoms</div>
+          <div class="step" id="ha-stp4">4 — Mental Health</div>
+          <div class="step" id="ha-stp5">5 — Review</div>
+        </div>
+        <!-- Step 1 -->
+        <div id="ha-1">
+          <div class="g2">
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            </div>
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            </div>
+          </div>
+          <button class="btn filled" onclick="goHealthStep(2)">[ Next: Lifestyle → ]</button>
+        </div>
+        <!-- Step 2 -->
+        <div id="ha-2" style="display:none">
+          <div class="card" style="max-width:540px">
+            <div class="card-title"></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+          </div>
+          <div class="btn-grp">
+            <button class="btn" onclick="goHealthStep(1)">[ ← Back ]</button>
+            <button class="btn filled" onclick="goHealthStep(3)">[ Next: Symptoms → ]</button>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div id="ha-3" style="display:none">
+          <div class="card" style="max-width:540px">
+            <div class="card-title"></div>
+            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+            <div class="fgrp">
+              <div class="lbl"></div>
+              <div class="radio-grp">
+                <div class="radio-opt" onclick="selRadio(this)">None</div>
+                <div class="radio-opt" onclick="selRadio(this)">Mild</div>
+                <div class="radio-opt active" onclick="selRadio(this)">Moderate</div>
+                <div class="radio-opt" onclick="selRadio(this)">Severe</div>
+              </div>
+            </div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+          </div>
+          <div class="btn-grp">
+            <button class="btn" onclick="goHealthStep(2)">[ ← Back ]</button>
+            <button class="btn filled" onclick="goHealthStep(4)">[ Next: Mental Health → ]</button>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div id="ha-4" style="display:none">
+          <div class="card" style="max-width:540px">
+            <div class="card-title"></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+          <div class="btn-grp">
+            <button class="btn" onclick="goHealthStep(3)">[ ← Back ]</button>
+            <button class="btn filled" onclick="goHealthStep(5)">[ Review Assessment → ]</button>
+          </div>
+        </div>
+        <!-- Step 5 -->
+        <div id="ha-5" style="display:none">
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w50" style="margin:0"></div></div>
+            <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w50" style="margin:0"></div></div>
+            <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w50" style="margin:0"></div></div>
+            <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w50" style="margin:0"></div></div>
+            <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w50" style="margin:0"></div></div>
+          </div>
+          <div class="btn-grp">
+            <button class="btn" onclick="goHealthStep(4)">[ ← Back ]</button>
+            <button class="btn filled" onclick="show('dashboard',document.querySelectorAll('.nav-link')[0])">[ Submit Assessment ]</button>
+          </div>
+        </div>
+      </div>
+      <!-- TEST RESULTS -->
+      <div class="page" id="test-results">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn filled">[ Download PDF ]</button>
+        </div>
+        <div class="tab-bar">
+          <div class="tab active" onclick="switchTab(this,'results-recent')">Recent (4)</div>
+          <div class="tab" onclick="switchTab(this,'results-all')">All Results (28)</div>
+          <div class="tab" onclick="switchTab(this,'results-trends')">Trends</div>
+        </div>
+        <div id="results-recent">
+          <div class="g2">
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="tag"></div></div>
+              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="tag"></div></div>
+              <div style="margin-top:10px"><button class="btn sm">[ View Details ]</button></div>
+            </div>
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
+              <div class="wf-row"><div class="ln w40" style="margin:0"></div><div class="ln w30" style="margin:0"></div></div>
+              <div style="margin-top:10px"><button class="btn sm">[ View Details ]</button></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title"></div>
+            <div class="lnsm w100"></div>
+            <div class="lnsm w80" style="margin-top:4px"></div>
+            <div class="lnsm w60" style="margin-top:4px"></div>
+            <div style="margin-top:12px">
+              <button class="btn sm">[ Schedule Follow-up ]</button>
+              <button class="btn sm">[ Message Provider ]</button>
+            </div>
+          </div>
+        </div>
+        <div id="results-all" style="display:none">
+          <div class="li">
+            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+            <button class="btn sm">[ View ]</button>
+          </div>
+          <div class="li">
+            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+            <button class="btn sm">[ View ]</button>
+          </div>
+        </div>
+        <div id="results-trends" style="display:none">
+          <div class="card">
+            <div class="card-title"></div>
+            <div style="height:200px;background:var(--w-block);border:1px dashed var(--w-border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--w-label)">
+              [ Chart: Health Trends Over Time ]
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- MESSAGES -->
+      <div class="page" id="messages">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn filled">[ + New Message ]</button>
+        </div>
+        <div class="g2" style="align-items:start">
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title"></div>
+            <div class="msg-row">
+              <div style="flex:1"><div class="ln w60" style="margin-bottom:5px"></div><div class="lnsm w80"></div></div>
+              <div class="tag"></div>
+            </div>
+            <div class="msg-row">
+              <div style="flex:1"><div class="ln w60" style="margin-bottom:5px"></div><div class="lnsm w80"></div></div>
+              <div class="lnsm w30"></div>
+            </div>
+            <div class="msg-row">
+              <div style="flex:1"><div class="ln w60" style="margin-bottom:5px"></div><div class="lnsm w80"></div></div>
+              <div class="lnsm w30"></div>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title"></div>
+            <div class="msg-bub">
+              <div class="lnsm w40" style="margin-bottom:8px"></div>
+              <div class="lnsm w100"></div>
+              <div class="lnsm w100" style="margin-top:4px"></div>
+              <div class="lnsm w80" style="margin-top:4px"></div>
+            </div>
+            <div class="msg-bub" style="background:var(--w-bg)">
+              <div class="lnsm w40" style="margin-bottom:8px"></div>
+              <div class="lnsm w100"></div>
+              <div class="lnsm w60" style="margin-top:4px"></div>
+            </div>
+            <hr class="divider"/>
+            <div style="display:flex;gap:8px">
+              <div class="inp" style="flex:1;margin:0"></div>
+              <button class="btn filled">[ Send ]</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- LIVE CHAT SUPPORT -->
+      <div class="page" id="chat-support">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn">[ End Chat ]</button>
+        </div>
+        <div class="card" style="height:400px;display:flex;flex-direction:column">
+          <div class="card-title"></div>
+          <div style="flex:1;overflow-y:auto;padding:10px 0">
+            <div class="msg-bub">
+              <div class="lnsm w30" style="margin-bottom:6px"></div>
+              <div class="lnsm w100"></div>
+              <div class="lnsm w80" style="margin-top:4px"></div>
+            </div>
+            <div class="msg-bub" style="background:var(--w-bg);margin-left:40px">
+              <div class="lnsm w20" style="margin-bottom:6px"></div>
+              <div class="lnsm w100"></div>
+            </div>
+            <div class="msg-bub">
+              <div class="lnsm w30" style="margin-bottom:6px"></div>
+              <div class="lnsm w100"></div>
+              <div class="lnsm w60" style="margin-top:4px"></div>
+            </div>
+            <div style="text-align:center;padding:8px;font-size:9px;color:var(--w-label)">
+              [ Support agent is typing... ]
+            </div>
+          </div>
+          <hr class="divider"/>
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <div class="inp" style="flex:1;margin:0"></div>
+            <button class="btn sm">[ Attach ]</button>
+            <button class="btn filled">[ Send ]</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"></div>
+          <div class="btn-grp">
+            <button class="btn sm">[ Billing Question ]</button>
+            <button class="btn sm">[ Technical Issue ]</button>
+            <button class="btn sm">[ Appointment Help ]</button>
+            <button class="btn sm">[ Insurance Question ]</button>
+          </div>
+        </div>
+      </div>
+      <!-- DOCUMENTS -->
+      <div class="page" id="documents">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn filled">[ + Upload Documents ]</button>
+        </div>
+        <div class="tab-bar">
+          <div class="tab active" onclick="switchTab(this,'docs-all')">All Documents (24)</div>
+          <div class="tab" onclick="switchTab(this,'docs-lab')">Lab Results (8)</div>
+          <div class="tab" onclick="switchTab(this,'docs-imaging')">Imaging (6)</div>
+          <div class="tab" onclick="switchTab(this,'docs-other')">Other (10)</div>
+        </div>
+        <div id="docs-all">
+          <div class="card">
+            <div class="card-title"></div>
+            <div style="height:200px;background:var(--w-block);border:1px dashed var(--w-border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--w-label);flex-direction:column;gap:10px">
+              <div>[ Drag & Drop Files Here ]</div>
+              <button class="btn sm">[ Browse Files ]</button>
+            </div>
+          </div>
+          <div class="g3">
+            <div class="li">
+              <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+              <div class="li-acts">
+                <button class="btn sm">[ Download ]</button>
+                <button class="btn sm">[ Share ]</button>
+              </div>
+            </div>
+            <div class="li">
+              <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+              <div class="li-acts">
+                <button class="btn sm">[ Download ]</button>
+                <button class="btn sm">[ Share ]</button>
+              </div>
+            </div>
+            <div class="li">
+              <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+              <div class="li-acts">
+                <button class="btn sm">[ Download ]</button>
+                <button class="btn sm">[ Share ]</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="docs-lab" style="display:none">
+          <div class="li">
+            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+            <button class="btn sm">[ View ]</button>
+          </div>
+        </div>
+        <div id="docs-imaging" style="display:none">
+          <div class="li">
+            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+            <button class="btn sm">[ View ]</button>
+          </div>
+        </div>
+        <div id="docs-other" style="display:none">
+          <div class="li">
+            <div style="flex:1"><div class="ln w80" style="margin-bottom:6px"></div><div class="lnsm w60"></div><div style="margin-top:8px"><div class="tag"></div></div></div>
+            <button class="btn sm">[ View ]</button>
+          </div>
+        </div>
+      </div>
+      <!-- PROFILE SETTINGS -->
+      <div class="page" id="profile">
+        <div class="ph">
+          <div><div class="ph-title"></div><div class="ph-sub"></div></div>
+          <button class="btn filled">[ Save All Changes ]</button>
+        </div>
+        <div class="tab-bar">
+          <div class="tab active" onclick="switchTab(this,'profile-personal')">Personal Info</div>
+          <div class="tab" onclick="switchTab(this,'profile-medical')">Medical Info</div>
+          <div class="tab" onclick="switchTab(this,'profile-notifications')">Notifications</div>
+          <div class="tab" onclick="switchTab(this,'profile-security')">Security</div>
+        </div>
+        <div id="profile-personal">
+          <div class="g2">
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <button class="btn filled">[ Update Personal Info ]</button>
+            </div>
+            <div class="card">
+              <div class="card-title"></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+              <button class="btn">[ Update Contact Info ]</button>
+            </div>
+          </div>
+        </div>
+        <div id="profile-medical" style="display:none">
+          <div class="card" style="max-width:540px">
+            <div class="card-title"></div>
+            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="txa"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <button class="btn filled">[ Update Medical Info ]</button>
+          </div>
+        </div>
+        <div id="profile-notifications" style="display:none">
+          <div class="card" style="max-width:540px">
+            <div class="card-title"></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+        <div id="profile-security" style="display:none">
+          <div class="card" style="max-width:540px">
+            <div class="card-title"></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <div class="fgrp"><div class="lbl"></div><div class="inp"></div></div>
+            <button class="btn filled">[ Update Password ]</button>
+            <hr class="divider"/>
+            <div class="card-title" style="margin-top:4px"></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="tog-row"><div class="ln w60" style="margin:0"></div><div class="tog" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function show(id, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+    if (el) el.classList.add('active');
+  }
+  function goRegStep(n) {
+    [1,2,3,4].forEach(i => {
+      document.getElementById('reg-'+i).style.display = i===n?'block':'none';
+      var s = document.getElementById('reg-stp'+i);
+      s.className = 'step'+(i<n?' done':i===n?' active':'');
+    });
+  }
+  function goBookStep(n) {
+    [1,2,3,4].forEach(i => {
+      document.getElementById('bk-'+i).style.display = i===n?'block':'none';
+      var s = document.getElementById('bk-stp'+i);
+      s.className = 'step'+(i<n?' done':i===n?' active':'');
+    });
+  }
+  function goHealthStep(n) {
+    [1,2,3,4,5].forEach(i => {
+      document.getElementById('ha-'+i).style.display = i===n?'block':'none';
+      var s = document.getElementById('ha-stp'+i);
+      s.className = 'step'+(i<n?' done':i===n?' active':'');
+    });
+  }
+  function switchTab(el, panelId) {
+    el.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    var prefix = panelId.substring(0, panelId.lastIndexOf('-'));
+    document.querySelectorAll('[id^="'+prefix+'-"]').forEach(p => p.style.display='none');
+    var t = document.getElementById(panelId);
+    if (t) t.style.display = 'block';
+  }
+  function selOpt(el) {
+    el.parentElement.querySelectorAll('.sel-opt').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function selRadio(el) {
+    el.parentElement.querySelectorAll('.radio-opt').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function selSlot(el) {
+    if (el.classList.contains('full')) return;
+    el.parentElement.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+</body>
+</html>
+
+<!--
+SUMMARY TABLE:
+Step → Screen Name → File Reference → Navigates To
+1.0 → Landing/Dashboard → #dashboard → Appointments, Book Appointment, Messages
+1.1 → Patient Registration Step 1 → #registration #reg-1 → Registration Step 2
+1.2 → Patient Registration Step 2 → #registration #reg-2 → Registration Step 3
+1.3 → Patient Registration Step 3 → #registration #reg-3 → Registration Step 4
+1.4 → Patient Registration Step 4 → #registration #reg-4 → Dashboard
+2.0 → User Login → #login → Dashboard, Registration
+3.0 → My Appointments → #appointments → Book Appointment, Dashboard
+4.0 → Book Appointment Step 1 → #book-appointment #bk-1 → Book Appointment Step 2
+4.1 → Book Appointment Step 2 → #book-appointment #bk-2 → Book Appointment Step 3
+4.2 → Book Appointment Step 3 → #book-appointment #bk-3 → Book Appointment Step 4
+4.3 → Book Appointment Step 4 → #book-appointment #bk-4 → Dashboard
+5.0 → Health Assessment Step 1 → #health-assessment #ha-1 → Health Assessment Step 2
+5.1 → Health Assessment Step 2 → #health-assessment #ha-2 → Health Assessment Step 3
+5.2 → Health Assessment Step 3 → #health-assessment #ha-3 → Health Assessment Step 4
+5.3 → Health Assessment Step 4 → #health-assessment #ha-4 → Health Assessment Step 5
+5.4 → Health Assessment Step 5 → #health-assessment #ha-5 → Dashboard
+6.0 → Test Results → #test-results → Messages, Appointments
+7.0 → Secure Messages → #messages → Dashboard
+8.0 → Live Chat Support → #chat-support → Dashboard
+9.0 → Document Management → #documents → Dashboard
+10.0 → Profile Settings → #profile → Dashboard
+-->
